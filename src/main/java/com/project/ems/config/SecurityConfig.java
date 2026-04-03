@@ -28,17 +28,31 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .headers(headers ->
+                headers.frameOptions(frame -> frame.deny()))
+
             .authorizeHttpRequests(auth -> auth
-                // Public auth endpoints
-                .requestMatchers("/auth/register", "/auth/login", "/auth/send-otp",
-                                 "/auth/verify-otp", "/auth/reset-password").permitAll()
-                // Public read endpoints
+
+                .requestMatchers(
+                    "/auth/register",
+                    "/auth/login",
+                    "/auth/send-otp",
+                    "/auth/verify-otp",
+                    "/auth/reset-password",
+                    "/auth/refresh",
+                    "/payments/webhook"
+                ).permitAll()
+
                 .requestMatchers(HttpMethod.GET, "/categories", "/categories/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/venues", "/venues/**").permitAll()
-                // Everything else needs authentication
+                .requestMatchers(HttpMethod.GET, "/events", "/events/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/tickets/**").permitAll()
+
                 .anyRequest().authenticated()
             )
+
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

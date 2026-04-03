@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +25,7 @@ import com.project.ems.common.entity.Category;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin("http://localhost:5173/")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -30,17 +34,30 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // GET /categories — PUBLIC
+    private String resolveRole() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth.getAuthorities() == null) {
+            return "PUBLIC";
+        }
+        return auth.getAuthorities().stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("PUBLIC");
+    }
+
+    // GET /categories — PUBLIC sees ACTIVE only; ADMIN sees all
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> listActiveCategories() {
-        List<Category> categories = categoryService.listActiveCategories();
+        String role = resolveRole();
+        List<Category> categories = categoryService.listCategories(role);
         return ResponseEntity.ok(categories);
     }
 
-    // GET /categories/{id} — PUBLIC
+    // GET /categories/{id} — PUBLIC sees ACTIVE only; ADMIN sees all
     @GetMapping("/categories/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
+        String role = resolveRole();
+        Category category = categoryService.getCategoryById(id, role);
         return ResponseEntity.ok(category);
     }
 

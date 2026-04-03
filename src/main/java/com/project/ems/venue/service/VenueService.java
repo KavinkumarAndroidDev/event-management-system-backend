@@ -23,7 +23,22 @@ public class VenueService {
         this.venueRepository = venueRepository;
     }
 
-    // GET /venues — PUBLIC (filter by city optional)
+    // GET /venues — PUBLIC sees ACTIVE only; ADMIN sees all
+    @Transactional(readOnly = true)
+    public List<Venue> listVenues(String city, String role) {
+        if ("ADMIN".equals(role)) {
+            if (city != null && !city.isBlank()) {
+                return venueRepository.findByCityIgnoreCase(city.trim());
+            }
+            return venueRepository.findAll();
+        }
+        if (city != null && !city.isBlank()) {
+            return venueRepository.findByStatusAndCityIgnoreCase(Status.ACTIVE, city.trim());
+        }
+        return venueRepository.findByStatus(Status.ACTIVE);
+    }
+
+    // GET /venues — PUBLIC (kept for internal use)
     @Transactional(readOnly = true)
     public List<Venue> listActiveVenues(String city) {
 
@@ -34,7 +49,18 @@ public class VenueService {
         return venueRepository.findByStatus(Status.ACTIVE);
     }
 
-    // GET /venues/{id} — PUBLIC
+    // GET /venues/{id} — PUBLIC sees ACTIVE only; ADMIN sees all statuses
+    @Transactional(readOnly = true)
+    public Venue getVenueById(Long id, String role) {
+        Venue venue = venueRepository.findById(id)
+                .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
+        if (!"ADMIN".equals(role) && venue.getStatus() != Status.ACTIVE) {
+            throw new VenueNotFoundException("Venue not found");
+        }
+        return venue;
+    }
+
+    // GET /venues/{id} — PUBLIC (kept for internal use)
     @Transactional(readOnly = true)
     public Venue getVenueById(Long id) {
         return venueRepository.findById(id)

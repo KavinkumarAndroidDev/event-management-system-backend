@@ -1,6 +1,7 @@
 package com.project.ems.auth.util;
 
 import java.util.Date;
+import java.util.Base64;
 
 import javax.crypto.SecretKey;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -24,7 +27,8 @@ public class JwtUtil {
     private long refreshExpirationMs;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(Long userId, String email, String role) {
@@ -32,6 +36,7 @@ public class JwtUtil {
                 .subject(String.valueOf(userId))
                 .claim("email", email)
                 .claim("role", role)
+                .claim("type", "access")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSigningKey())
@@ -60,6 +65,10 @@ public class JwtUtil {
         return Long.parseLong(extractClaims(token).getSubject());
     }
 
+    public String extractEmail(String token) {
+        return extractClaims(token).get("email", String.class);
+    }
+
     public String extractRole(String token) {
         return extractClaims(token).get("role", String.class);
     }
@@ -68,7 +77,20 @@ public class JwtUtil {
         try {
             Claims claims = extractClaims(token);
             return !claims.getExpiration().before(new Date());
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            extractClaims(token);
+            return false;
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
@@ -77,7 +99,16 @@ public class JwtUtil {
         try {
             String type = extractClaims(token).get("type", String.class);
             return "refresh".equals(type);
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public boolean isAccessToken(String token) {
+        try {
+            String type = extractClaims(token).get("type", String.class);
+            return "access".equals(type);
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }

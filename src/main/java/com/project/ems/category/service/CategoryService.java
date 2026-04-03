@@ -23,23 +23,37 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // GET /categories — PUBLIC
+    // GET /categories — PUBLIC sees ACTIVE only; ADMIN sees all
+    @Transactional(readOnly = true)
+    public List<Category> listCategories(String role) {
+        if ("ADMIN".equals(role)) {
+            return categoryRepository.findAll();
+        }
+        return categoryRepository.findByStatus(Status.ACTIVE);
+    }
+
+    // GET /categories — PUBLIC (kept for internal use)
     @Transactional(readOnly = true)
     public List<Category> listActiveCategories() {
         return categoryRepository.findByStatus(Status.ACTIVE);
     }
 
-    // GET /categories/{id} — PUBLIC
+    // GET /categories/{id} — PUBLIC sees ACTIVE only; ADMIN sees all statuses
+    @Transactional(readOnly = true)
+    public Category getCategoryById(Long id, String role) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+        if (!"ADMIN".equals(role) && category.getStatus() != Status.ACTIVE) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+        return category;
+    }
+
+    // GET /categories/{id} — PUBLIC (kept for internal use)
     @Transactional(readOnly = true)
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
-    }
-
-    // GET /admin/categories — ADMIN (all including inactive)
-    @Transactional(readOnly = true)
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
     }
 
     // POST /categories — ADMIN

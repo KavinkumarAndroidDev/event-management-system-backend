@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,17 +33,30 @@ public class VenueController {
         this.venueService = venueService;
     }
 
-    // GET /venues — PUBLIC (optional ?city= filter)
+    private String resolveRole() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth.getAuthorities() == null) {
+            return "PUBLIC";
+        }
+        return auth.getAuthorities().stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("PUBLIC");
+    }
+
+    // GET /venues — PUBLIC sees ACTIVE only; ADMIN sees all
     @GetMapping("/venues")
     public ResponseEntity<List<Venue>> listActiveVenues(@RequestParam(required = false) String city) {
-        List<Venue> venues = venueService.listActiveVenues(city);
+        String role = resolveRole();
+        List<Venue> venues = venueService.listVenues(city, role);
         return ResponseEntity.ok(venues);
     }
 
-    // GET /venues/{id} — PUBLIC
+    // GET /venues/{id} — PUBLIC sees ACTIVE only; ADMIN sees all
     @GetMapping("/venues/{id}")
     public ResponseEntity<Venue> getVenueById(@PathVariable Long id) {
-        Venue venue = venueService.getVenueById(id);
+        String role = resolveRole();
+        Venue venue = venueService.getVenueById(id, role);
         return ResponseEntity.ok(venue);
     }
 

@@ -1,18 +1,17 @@
 package com.project.ems.event.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.project.ems.venue.repository.VenueRepository;
 import com.project.ems.auth.repository.UserRepository;
 import com.project.ems.category.repository.CategoryRepository;
 import com.project.ems.common.entity.Category;
@@ -25,19 +24,21 @@ import com.project.ems.common.exception.CategoryNotFoundException;
 import com.project.ems.common.exception.EventNotFoundException;
 import com.project.ems.common.exception.OrganizerNotVerifiedException;
 import com.project.ems.common.exception.TicketMismatchException;
+import com.project.ems.common.exception.UnauthorizedException;
 import com.project.ems.common.exception.UserNotFoundException;
 import com.project.ems.common.exception.VenueNotFoundException;
 import com.project.ems.event.dto.EventCreateRequest;
 import com.project.ems.event.dto.EventDetailDTO;
 import com.project.ems.event.dto.EventListDTO;
+import com.project.ems.event.dto.EventStatusRequest;
+import com.project.ems.event.dto.EventUpdateRequest;
 import com.project.ems.event.mapper.EventMapper;
 import com.project.ems.event.repository.EventRepository;
 import com.project.ems.organizer.repository.OrganizerProfileRepository;
-
+import com.project.ems.venue.repository.VenueRepository;
 
 @Service
 public class EventService {
-
 
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
@@ -61,33 +62,41 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public List<EventListDTO> listActiveEvents() {
-        return eventRepository
-                .findByStatusAndStartTimeAfter(Event.EventStatus.PUBLISHED, LocalDateTime.now())
-                .stream()
-                .map(eventMapper::toListDTO)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public EventDetailDTO getEventById(Long id) {
+    public EventDetailDTO getEventById(Long id, Long userId, String role) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
+        if ("ADMIN".equals(role)) {
+            return eventMapper.toDetailDTO(event);
+        }
+
+        if ("ORGANIZER".equals(role)) {
+            if (!event.getOrganizer().getId().equals(userId)) {
+                throw new UnauthorizedException("Access denied");
+            }
+            return eventMapper.toDetailDTO(event);
+        }
+
+        if (event.getStatus() != Event.EventStatus.PUBLISHED
+                || event.getStartTime().isBefore(LocalDateTime.now())
+                || event.getCategory().getStatus() != Status.ACTIVE
+                || event.getVenue().getStatus() != Status.ACTIVE) {
+            throw new EventNotFoundException(id);
+        }
+
         return eventMapper.toDetailDTO(event);
     }
-    
+
     @Transactional
-    public Event createEvent(EventCreateRequest request, Long sessionUserId) {
-        boolean isVerified = organizerProfileRepository
-                .existsByUserIdAndVerifiedTrue(sessionUserId);
+    public EventDetailDTO createEvent(EventCreateRequest request, Long userId) {
+        boolean isVerified = organizerProfileRepository.existsByUserIdAndVerifiedTrue(userId);
 
         if (!isVerified) {
             throw new OrganizerNotVerifiedException("Organizer is not verified");
         }
 
-        User organizer = userRepository.findById(sessionUserId)
-                .orElseThrow(() -> new UserNotFoundException ("User not found"));
+        User organizer = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
@@ -95,10 +104,7 @@ public class EventService {
         Venue venue = venueRepository.findById(request.getVenueId())
                 .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
 
-        int ticketSum = request.getTickets()
-                .stream()
-                .mapToInt(t -> t.getTotalQuantity())
-                .sum();
+        int ticketSum = request.getTickets().stream().mapToInt(t -> t.getTotalQuantity()).sum();
 
         if (ticketSum != request.getTotalQuantity()) {
             throw new TicketMismatchException("Ticket quantity mismatch with event capacity");
@@ -111,14 +117,11 @@ public class EventService {
         event.setCategory(category);
         event.setVenue(venue);
         event.setOrganizer(organizer);
-
         event.setStartTime(request.getStartTime());
         event.setEndTime(request.getEndTime());
-
         event.setCancellationDeadline(request.getCancellationDeadline());
         event.setIsCancellable(request.getCancellationDeadline() != null);
-
-        event.setStatus(Event.EventStatus.PENDING_APPROVAL);
+        event.setStatus(Event.EventStatus.DRAFT);
         event.setCreatedBy(organizer);
         event.setCreatedAt(LocalDateTime.now());
 
@@ -137,7 +140,135 @@ public class EventService {
 
         event.setTickets(tickets);
 
-        return eventRepository.save(event);
+        return eventMapper.toDetailDTO(eventRepository.save(event));
+    }
+
+    @Transactional
+    public EventDetailDTO updateEvent(Long id, EventUpdateRequest request, Long userId) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        if (!event.getOrganizer().getId().equals(userId)) {
+            throw new UnauthorizedException("You can only edit your own events");
+        }
+
+        if (event.getStatus() != Event.EventStatus.DRAFT && event.getStatus() != Event.EventStatus.APPROVED) {
+            throw new IllegalStateException("Event can only be updated in DRAFT or APPROVED state");
+        }
+
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            event.setTitle(request.getTitle().trim());
+        }
+
+        if (request.getDescription() != null && !request.getDescription().isBlank()) {
+            event.setDescription(request.getDescription().trim());
+        }
+
+        if (request.getFullDescription() != null && !request.getFullDescription().isBlank()) {
+            event.setFullDescription(request.getFullDescription().trim());
+        }
+
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+            event.setCategory(category);
+        }
+
+        if (request.getVenueId() != null) {
+            Venue venue = venueRepository.findById(request.getVenueId())
+                    .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
+            event.setVenue(venue);
+        }
+
+        if (request.getStartTime() != null) event.setStartTime(request.getStartTime());
+        if (request.getEndTime() != null) event.setEndTime(request.getEndTime());
+        if (request.getCancellationDeadline() != null) {
+            event.setCancellationDeadline(request.getCancellationDeadline());
+            event.setIsCancellable(true);
+        }
+
+        User updater = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        event.setUpdatedBy(updater);
+        event.setUpdatedAt(LocalDateTime.now());
+
+        return eventMapper.toDetailDTO(eventRepository.save(event));
+    }
+
+    @Transactional
+    public void deleteEvent(Long id, Long userId) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        if (!event.getOrganizer().getId().equals(userId)) {
+            throw new UnauthorizedException("You can only delete your own events");
+        }
+
+        if (event.getStatus() != Event.EventStatus.DRAFT) {
+            throw new IllegalStateException("Only DRAFT events can be deleted");
+        }
+
+        eventRepository.delete(event);
+    }
+
+    @Transactional
+    public EventDetailDTO changeStatus(Long id, EventStatusRequest request, Long userId) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String roleName = user.getRole().getName().name();
+        String newStatus = request.getStatus().toUpperCase();
+
+        switch (newStatus) {
+            case "PENDING_APPROVAL":
+                if (!roleName.equals("ORGANIZER") || !event.getOrganizer().getId().equals(userId))
+                    throw new UnauthorizedException("Only organizer can submit for approval");
+                if (event.getStatus() != Event.EventStatus.DRAFT)
+                    throw new IllegalStateException("Only DRAFT events can be submitted for approval");
+                event.setStatus(Event.EventStatus.PENDING_APPROVAL);
+                break;
+
+            case "APPROVED":
+                if (!roleName.equals("ADMIN"))
+                    throw new UnauthorizedException("Only admin can approve events");
+                event.setStatus(Event.EventStatus.APPROVED);
+                event.setApprovedBy(user);
+                event.setApprovedAt(LocalDateTime.now());
+                break;
+
+            case "PUBLISHED":
+                if (!roleName.equals("ORGANIZER") || !event.getOrganizer().getId().equals(userId))
+                    throw new UnauthorizedException("Only organizer can publish events");
+                if (event.getStatus() != Event.EventStatus.APPROVED)
+                    throw new IllegalStateException("Event must be APPROVED before publishing");
+                event.setStatus(Event.EventStatus.PUBLISHED);
+                event.setPublishedAt(LocalDateTime.now());
+                break;
+
+            case "CANCELLED":
+                boolean isAdmin = roleName.equals("ADMIN");
+                boolean isOwner = event.getOrganizer().getId().equals(userId);
+
+                if (!isAdmin && !isOwner) {
+                    throw new UnauthorizedException("Only organizer or admin can cancel events");
+                }
+
+                if (!isAdmin && event.getStatus() == Event.EventStatus.PUBLISHED) {
+                    throw new IllegalStateException("Organizer cannot cancel a published event");
+                }
+
+                event.setStatus(Event.EventStatus.CANCELLED);
+                event.setCancelledBy(user);
+                event.setCancelledAt(LocalDateTime.now());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid status: " + request.getStatus());
+        }
+
+        return eventMapper.toDetailDTO(eventRepository.save(event));
     }
 
     @Transactional(readOnly = true)
@@ -145,40 +276,76 @@ public class EventService {
             String search,
             Long categoryId,
             String city,
-            String fromDate,
-            String toDate,
+            Long venueId,
+            String date,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            String status,
+            Long userId,
+            String role,
             int page,
             int size,
-            String[] sort
+            String sort
     ) {
+        String[] parts = sort.split(",");
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(getSortOrders(sort)));
+        String property = parts[0];
+        String direction = (parts.length > 1) ? parts[1] : "asc";
 
-        LocalDateTime from = fromDate != null ? LocalDateTime.parse(fromDate) : null;
-        LocalDateTime to = toDate != null ? LocalDateTime.parse(toDate) : null;
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
-        Specification<Event> spec = EventSpecification.filter(
-                search, categoryId, city, from, to
-        );
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, property));
 
-        return eventRepository.findAll(spec, pageable)
-                .map(eventMapper::toListDTO);
-    }
-    
-    
-    private List<Sort.Order> getSortOrders(String[] sort) {
-        List<Sort.Order> orders = new ArrayList<>();
+        String normalizedSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        String normalizedCity = (city != null && !city.isBlank()) ? city.trim() : null;
 
-        for (String s : sort) {
-            String[] parts = s.split(",");
-            orders.add(new Sort.Order(
-                    parts[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
-                    parts[0]
-            ));
+        LocalDateTime dateFilter = null;
+        if (date != null && !date.isBlank()) {
+            dateFilter = LocalDate.parse(date).atStartOfDay();
         }
 
-        return orders;
+        if ("ADMIN".equals(role)) {
+            Event.EventStatus filterStatus = null;
+            if (status != null && !status.isBlank()) {
+                try {
+                    filterStatus = Event.EventStatus.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            return eventRepository.findAdminEvents(
+                    filterStatus, normalizedSearch, categoryId, normalizedCity,
+                    venueId, dateFilter, minPrice, maxPrice, pageable
+            ).map(eventMapper::toListDTO);
+        }
+
+        if ("ORGANIZER".equals(role)) {
+            Event.EventStatus filterStatus = null;
+            if (status != null && !status.isBlank()) {
+                try {
+                    filterStatus = Event.EventStatus.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            return eventRepository.findOrganizerEvents(
+                    userId, filterStatus, normalizedSearch, categoryId, normalizedCity,
+                    venueId, dateFilter, minPrice, maxPrice, pageable
+            ).map(eventMapper::toListDTO);
+        }
+
+        return eventRepository.findPublicEvents(
+                LocalDateTime.now(), normalizedSearch, categoryId, normalizedCity,
+                venueId, dateFilter, minPrice, maxPrice, pageable
+        ).map(eventMapper::toListDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EventListDTO> listActiveEvents() {
+        return eventRepository
+                .findByStatusAndStartTimeAfter(Event.EventStatus.PUBLISHED, LocalDateTime.now())
+                .stream()
+                .map(eventMapper::toListDTO)
+                .toList();
     }
 }
-
-
