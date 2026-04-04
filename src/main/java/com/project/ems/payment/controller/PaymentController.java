@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/payments")
+@CrossOrigin("http://127.0.0.1:5500/")
 public class PaymentController {
 
     private final PaymentService paymentService;

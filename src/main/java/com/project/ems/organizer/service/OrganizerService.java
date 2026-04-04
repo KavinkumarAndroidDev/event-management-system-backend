@@ -8,8 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.ems.auth.repository.RoleRepository;
 import com.project.ems.auth.repository.UserRepository;
 import com.project.ems.common.entity.OrganizerProfile;
+import com.project.ems.common.entity.RoleName;
 import com.project.ems.common.entity.User;
 import com.project.ems.common.exception.OrganizerAlreadyExistsException;
 import com.project.ems.common.exception.OrganizerNotFoundException;
@@ -25,11 +27,13 @@ public class OrganizerService {
 
     private final OrganizerProfileRepository organizerProfileRepository;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     public OrganizerService(OrganizerProfileRepository organizerProfileRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository, RoleRepository roleRepository) {
         this.organizerProfileRepository = organizerProfileRepository;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
@@ -143,6 +147,11 @@ public class OrganizerService {
         String status = request.getStatus().toUpperCase();
         if (status.equals("APPROVED")) {
             profile.setVerified(true);
+            User user = profile.getUser();
+            user.setRole(
+                roleRepository.findByName(RoleName.ORGANIZER)
+                    .orElseThrow(() -> new RuntimeException("Role not found"))
+            );
         } else if (status.equals("REJECTED") || status.equals("SUSPENDED")) {
             profile.setVerified(false);
         }

@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/events")
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin("http://127.0.0.1:5500/")
 public class EventController {
 
     private final EventService eventService;

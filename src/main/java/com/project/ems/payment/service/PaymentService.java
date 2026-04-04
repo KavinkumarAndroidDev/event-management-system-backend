@@ -235,56 +235,5 @@ public class PaymentService {
         return res;
     }
 
-    @Transactional
-    public void handleWebhook(String payload, String signature) {
-        try {
-            org.json.JSONObject event = new org.json.JSONObject(payload);
-            String eventType = event.optString("event", "");
-
-            if (eventType.equals("payment.captured")) {
-                org.json.JSONObject paymentEntity = event
-                        .getJSONObject("payload")
-                        .getJSONObject("payment")
-                        .getJSONObject("entity");
-
-                String orderId = paymentEntity.optString("order_id");
-                String paymentId = paymentEntity.optString("id");
-
-                paymentRepository.findByRazorpayOrderId(orderId).ifPresent(payment -> {
-                    if (payment.getStatus() != PaymentStatus.SUCCESS) {
-                        payment.setRazorpayPaymentId(paymentId);
-                        payment.setStatus(PaymentStatus.SUCCESS);
-                        payment.setPaidAt(java.time.LocalDateTime.now());
-                        paymentRepository.save(payment);
-
-                        Registration reg = payment.getRegistration();
-                        reg.setStatus(RegistrationStatus.CONFIRMED);
-                        registrationRepository.save(reg);
-                    }
-                });
-
-            } else if (eventType.equals("payment.failed")) {
-                org.json.JSONObject paymentEntity = event
-                        .getJSONObject("payload")
-                        .getJSONObject("payment")
-                        .getJSONObject("entity");
-
-                String orderId = paymentEntity.optString("order_id");
-
-                paymentRepository.findByRazorpayOrderId(orderId).ifPresent(payment -> {
-                    if (payment.getStatus() == PaymentStatus.PENDING) {
-                        payment.setStatus(PaymentStatus.FAILED);
-                        paymentRepository.save(payment);
-
-                        Registration reg = payment.getRegistration();
-                        reg.setStatus(RegistrationStatus.FAILED);
-                        registrationRepository.save(reg);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            throw new RazorpayOrderException("Webhook processing failed: " + e.getMessage());
-        }
-    }
 
 }

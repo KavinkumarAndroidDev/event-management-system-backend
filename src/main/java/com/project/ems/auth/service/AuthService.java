@@ -173,9 +173,7 @@ public class AuthService {
     
     @Transactional
     public void resetPassword(String identifier, String otp, String newPassword) {
-        // Verify OTP first — throws if invalid/expired
         otpService.verifyOtp(identifier, otp);
-        // Reset password after successful OTP check
         userService.resetPassword(identifier, newPassword);
     }
 
