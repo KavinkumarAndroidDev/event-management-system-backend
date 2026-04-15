@@ -141,4 +141,13 @@ public class User {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", password=" + password + ", fullName=" + fullName + ", phone="
+				+ phone + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", gender=" + gender + ", role="
+				+ role + ", status=" + status + "]";
+	}
+	
+	
 }

@@ -20,10 +20,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // -------------------------------------------------------------------------
-    // Read
-    // -------------------------------------------------------------------------
-
     public User getUserOrThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -40,14 +36,9 @@ public class UserService {
             return userRepository.findByEmailIgnoreCase(trimmed);
         }
 
-        // Normalize phone: strip all non-digit characters before querying
         String normalizedPhone = trimmed.replaceAll("[^\\d]", "");
         return userRepository.findByPhone(normalizedPhone);
     }
-
-    // -------------------------------------------------------------------------
-    // Update
-    // -------------------------------------------------------------------------
 
     @Transactional
     public User updateUser(Long userId, UpdateUserRequest request) {
@@ -58,7 +49,6 @@ public class UserService {
         }
 
         if (request.getPhone() != null && !request.getPhone().isBlank()) {
-            // Normalize phone on update too, for consistency
             String normalizedPhone = request.getPhone().trim().replaceAll("[^\\d]", "");
             user.setPhone(normalizedPhone);
         }
@@ -74,26 +64,25 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // -------------------------------------------------------------------------
-    // Deactivate
-    // -------------------------------------------------------------------------
-
-    @Transactional
-    public void deactivateUser(Long userId) {
-        User user = getUserOrThrow(userId);
-        user.setStatus(User.UserStatus.INACTIVE);
-        userRepository.save(user);
-    }
-
-    // -------------------------------------------------------------------------
-    // Password Reset
-    // -------------------------------------------------------------------------
-
     @Transactional
     public void resetPassword(String identifier, String newPassword) {
         User user = findByIdentifier(identifier)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setPassword(PasswordUtil.hashPassword(newPassword));
         userRepository.save(user);
+    }
+
+    public com.project.ems.auth.dto.UserProfileResponse toProfileResponse(User user) {
+        return new com.project.ems.auth.dto.UserProfileResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getPhone(),
+                user.getGender(),
+                user.getRole().getName().name(),
+                user.getStatus(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
     }
 }

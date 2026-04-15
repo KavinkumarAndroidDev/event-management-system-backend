@@ -87,11 +87,12 @@ public class Event {
         DRAFT,
         PENDING_APPROVAL,
         APPROVED,
+        REJECTED,
         PUBLISHED,
         CANCELLED,
-        COMPLETED
+        COMPLETED,
+        ONGOING
     }
-    
     
     public Event() {
     	

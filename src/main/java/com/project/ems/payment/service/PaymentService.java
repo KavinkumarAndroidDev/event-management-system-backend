@@ -2,6 +2,7 @@ package com.project.ems.payment.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.Mac;
@@ -23,6 +24,7 @@ import com.project.ems.common.entity.Payment.PaymentStatus;
 import com.project.ems.common.entity.Registration;
 import com.project.ems.common.entity.Registration.RegistrationStatus;
 import com.project.ems.common.entity.RegistrationItem;
+import com.project.ems.common.entity.Ticket;
 import com.project.ems.common.exception.PaymentNotFoundException;
 import com.project.ems.common.exception.PaymentVerificationException;
 import com.project.ems.common.exception.RazorpayOrderException;
@@ -34,6 +36,7 @@ import com.project.ems.payment.dto.PaymentRetryRequest;
 import com.project.ems.payment.dto.PaymentVerifyRequest;
 import com.project.ems.payment.repository.PaymentRepository;
 import com.project.ems.participant.repository.ParticipantRepository;
+import com.project.ems.ticket.repository.TicketRepository;
 
 import com.razorpay.RazorpayClient;
 import com.razorpay.Order;
@@ -47,6 +50,7 @@ public class PaymentService {
     private final RegistrationRepository registrationRepository;
     private final RegistrationItemRepository registrationItemRepository;
     private final ParticipantRepository participantRepository;
+    private final TicketRepository ticketRepository;
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
@@ -57,11 +61,13 @@ public class PaymentService {
     public PaymentService(PaymentRepository paymentRepository,
                           RegistrationRepository registrationRepository,
                           RegistrationItemRepository registrationItemRepository,
-                          ParticipantRepository participantRepository) {
+                          ParticipantRepository participantRepository,
+                          TicketRepository ticketRepository) {
         this.paymentRepository = paymentRepository;
         this.registrationRepository = registrationRepository;
         this.registrationItemRepository = registrationItemRepository;
         this.participantRepository = participantRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Transactional
@@ -81,6 +87,7 @@ public class PaymentService {
             paymentRepository.save(payment);
             reg.setStatus(RegistrationStatus.FAILED);
             registrationRepository.save(reg);
+            restoreTicketQuantities(reg);
             throw new PaymentVerificationException("Payment signature verification failed");
         }
 
@@ -104,7 +111,7 @@ public class PaymentService {
                 .orElseThrow(() -> new RegistrationNotFoundException(request.getBookingId()));
 
         if (!reg.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("This booking does not belong to you");
+            throw new UnauthorizedException("This booking does not belong to you"); //TODO: Phrase change is required
         }
 
         Payment payment = paymentRepository.findByRegistrationId(reg.getId())
@@ -115,6 +122,8 @@ public class PaymentService {
 
         reg.setStatus(RegistrationStatus.FAILED);
         registrationRepository.save(reg);
+
+        restoreTicketQuantities(reg);
     }
 
     @Transactional
@@ -130,6 +139,14 @@ public class PaymentService {
             throw new IllegalStateException("Only FAILED bookings can be retried");
         }
 
+        List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
+        for (RegistrationItem item : items) {
+            Ticket ticket = item.getTicket();
+            if (ticket.getAvailableQuantity() < item.getQuantity()) {
+                throw new IllegalStateException("Not enough tickets available to retry: " + ticket.getName());
+            }
+        }
+
         try {
             RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
             JSONObject options = new JSONObject();
@@ -139,14 +156,23 @@ public class PaymentService {
             Order order = client.orders.create(options);
             String newOrderId = order.get("id");
 
+            for (RegistrationItem item : items) {
+                Ticket ticket = item.getTicket();
+                ticket.setAvailableQuantity(ticket.getAvailableQuantity() - item.getQuantity());
+                ticketRepository.save(ticket);
+            }
+
             Payment payment = paymentRepository.findByRegistrationId(reg.getId())
                     .orElse(new Payment());
+            boolean isNew = payment.getId() == null;
             payment.setRegistration(reg);
             payment.setGateway("razorpay");
             payment.setRazorpayOrderId(newOrderId);
             payment.setAmount(reg.getTotalAmount());
             payment.setStatus(PaymentStatus.PENDING);
-            payment.setCreatedAt(LocalDateTime.now());
+            if (isNew) {
+                payment.setCreatedAt(LocalDateTime.now());
+            }
             paymentRepository.save(payment);
 
             reg.setStatus(RegistrationStatus.PENDING);
@@ -185,8 +211,26 @@ public class PaymentService {
         return paymentRepository.findAll(pageable).map(this::toResponse);
     }
 
+    @Transactional(readOnly = true)
+    public Page<PaymentResponse> getUserPayments(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return paymentRepository.findByRegistrationUserId(userId, pageable).map(this::toResponse);
+    }
+
+    private void restoreTicketQuantities(Registration reg) {
+        List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
+        for (RegistrationItem item : items) {
+            Ticket ticket = item.getTicket();
+            ticket.setAvailableQuantity(ticket.getAvailableQuantity() + item.getQuantity());
+            ticketRepository.save(ticket);
+        }
+    }
+
     private void createParticipants(Registration reg) {
         for (RegistrationItem item : registrationItemRepository.findByRegistrationId(reg.getId())) {
+            if (participantRepository.existsByRegistrationItemId(item.getId())) {
+                continue;
+            }
             for (int i = 0; i < item.getQuantity(); i++) {
                 Participant p = new Participant();
                 p.setRegistrationItem(item);
@@ -234,6 +278,4 @@ public class PaymentService {
         }
         return res;
     }
-
-
 }

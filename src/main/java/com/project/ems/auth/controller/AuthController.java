@@ -13,7 +13,9 @@ import com.project.ems.auth.dto.AuthResponse;
 import com.project.ems.auth.dto.LoginRequest;
 import com.project.ems.auth.dto.RefreshTokenRequest;
 import com.project.ems.auth.dto.RegisterRequest;
+import com.project.ems.auth.dto.RegisterResponse;
 import com.project.ems.auth.service.AuthService;
+import com.project.ems.organizer.dto.OrganizerRegisterRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -30,15 +32,20 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse response = authService.register(request);
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        RegisterResponse response = authService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/register/organizer")
+    public ResponseEntity<RegisterResponse> registerOrganizer(@Valid @RequestBody OrganizerRegisterRequest request) {
+        RegisterResponse response = authService.registerOrganizer(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request.getEmail(), request.getPassword());
-        
         return ResponseEntity.ok(response);
     }
 

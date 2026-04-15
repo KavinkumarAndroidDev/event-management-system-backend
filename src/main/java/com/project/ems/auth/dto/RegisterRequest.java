@@ -18,7 +18,6 @@ public class RegisterRequest {
 	@Size(min = 3, message = "Name must be at least 3 characters")
 	private String fullName;
 
-	@NotBlank
 	@Pattern(regexp = "^[0-9]{10}$", message = "Phone must be 10 digits")
 	private String phone;
 
@@ -63,7 +62,5 @@ public class RegisterRequest {
 	public void setGender(User.Gender gender) {
 		this.gender = gender;
 	}
-
-	
 
 }

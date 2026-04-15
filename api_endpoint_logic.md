@@ -331,6 +331,16 @@ This document provides a comprehensive, endpoint-by-endpoint breakdown of the ex
 *   **Access:** Attendee (Owner).
 *   **Business Logic:** Facilitates guest name/phone modification processes. Enforces a harsh validation rule restricting any mutation attempt if the current system time supersedes the event's physical `startTime`.
 
+**`POST /api/participants`**
+*   **Purpose:** Explicitly save guest details for a booking.
+*   **Access:** Attendee (Owner).
+*   **Business Logic:** Highly transactional bulk operation:
+    1. Validates ownership of the target registration item.
+    2. Ensures the target event matches the booking.
+    3. Enforces a strict capacity constraint: total participants for a registration item (existing + new) can never exceed the numeric quantity defined in the registration item.
+    4. Automatically generates unique 12-char ticket codes.
+    5. Sets `ACTIVE` status and timestamps.
+
 ---
 
 ## 11. Event Registrations

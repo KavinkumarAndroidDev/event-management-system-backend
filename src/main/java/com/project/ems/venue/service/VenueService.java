@@ -23,7 +23,6 @@ public class VenueService {
         this.venueRepository = venueRepository;
     }
 
-    // GET /venues — PUBLIC sees ACTIVE only; ADMIN sees all
     @Transactional(readOnly = true)
     public List<Venue> listVenues(String city, String role) {
         if ("ADMIN".equals(role)) {
@@ -38,18 +37,6 @@ public class VenueService {
         return venueRepository.findByStatus(Status.ACTIVE);
     }
 
-    // GET /venues — PUBLIC (kept for internal use)
-    @Transactional(readOnly = true)
-    public List<Venue> listActiveVenues(String city) {
-
-        if (city != null && !city.isBlank()) {
-            return venueRepository.findByStatusAndCityIgnoreCase(Status.ACTIVE, city.trim());
-        }
-
-        return venueRepository.findByStatus(Status.ACTIVE);
-    }
-
-    // GET /venues/{id} — PUBLIC sees ACTIVE only; ADMIN sees all statuses
     @Transactional(readOnly = true)
     public Venue getVenueById(Long id, String role) {
         Venue venue = venueRepository.findById(id)
@@ -60,14 +47,6 @@ public class VenueService {
         return venue;
     }
 
-    // GET /venues/{id} — PUBLIC (kept for internal use)
-    @Transactional(readOnly = true)
-    public Venue getVenueById(Long id) {
-        return venueRepository.findById(id)
-                .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
-    }
-
-    // POST /venues — ADMIN
     @Transactional
     public Venue createVenue(VenueCreateRequest request) {
 
@@ -83,7 +62,6 @@ public class VenueService {
         return venueRepository.save(venue);
     }
 
-    // PUT /venues/{id} — ADMIN
     @Transactional
     public Venue updateVenue(Long id, VenueUpdateRequest request) {
 
@@ -113,7 +91,6 @@ public class VenueService {
         return venueRepository.save(venue);
     }
 
-    // PATCH /venues/{id}/status — ADMIN
     @Transactional
     public Venue updateVenueStatus(Long id, VenueStatusRequest request) {
 

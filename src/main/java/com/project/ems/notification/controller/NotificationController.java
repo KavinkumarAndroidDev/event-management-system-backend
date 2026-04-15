@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.ems.notification.dto.BroadcastLogResponse;
 import com.project.ems.notification.dto.BroadcastRequest;
 import com.project.ems.notification.dto.NotificationReadRequest;
 import com.project.ems.notification.dto.NotificationResponse;
@@ -78,8 +79,20 @@ public class NotificationController {
 
     @PostMapping("/notifications/broadcast")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> broadcast(@Valid @RequestBody BroadcastRequest request) {
-        notificationService.broadcast(request);
+    public ResponseEntity<String> broadcast(
+            @Valid @RequestBody BroadcastRequest request,
+            @AuthenticationPrincipal Long userId
+    ) {
+        notificationService.broadcast(request, userId);
         return ResponseEntity.ok("Broadcast sent");
+    }
+
+    @GetMapping("/notifications/broadcast-history")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<BroadcastLogResponse>> getBroadcastHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return ResponseEntity.ok(notificationService.getBroadcastHistory(page, size));
     }
 }

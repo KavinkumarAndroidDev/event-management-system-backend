@@ -23,6 +23,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByOrganizerId(Long organizerId);
 
+    @Query("SELECT COUNT(e) FROM Event e WHERE e.organizer.id = :organizerId")
+    Long countByOrganizerId(@Param("organizerId") Long organizerId);
+
+    @Query("SELECT COUNT(e) FROM Event e WHERE e.organizer.id = :organizerId AND e.status = :status")
+    Long countByOrganizerIdAndStatus(@Param("organizerId") Long organizerId, @Param("status") EventStatus status);
+
+    @Query("SELECT COUNT(e) FROM Event e WHERE e.status = :status")
+    Long countByStatus(@Param("status") EventStatus status);
+
     @Query("SELECT e FROM Event e WHERE " +
            "e.status = 'PUBLISHED' " +
            "AND e.startTime > :now " +
@@ -87,4 +96,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice,
             Pageable pageable);
+    
+    
+    List<Event> findByStatusAndStartTimeBefore(EventStatus status, LocalDateTime time);
+
+    List<Event> findByStatusAndEndTimeBefore(EventStatus status, LocalDateTime time);
 }

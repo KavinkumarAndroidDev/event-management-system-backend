@@ -27,10 +27,12 @@ import com.project.ems.booking.dto.BookingStatusRequest;
 import com.project.ems.booking.repository.RegistrationItemRepository;
 import com.project.ems.booking.repository.RegistrationRepository;
 import com.project.ems.common.entity.Event;
+import com.project.ems.common.entity.Participant;
 import com.project.ems.common.entity.Payment;
 import com.project.ems.common.entity.Registration;
 import com.project.ems.common.entity.Registration.RegistrationStatus;
 import com.project.ems.common.entity.RegistrationItem;
+import com.project.ems.common.entity.Status;
 import com.project.ems.common.entity.Ticket;
 import com.project.ems.common.entity.User;
 import com.project.ems.common.exception.EventNotFoundException;
@@ -41,6 +43,7 @@ import com.project.ems.common.exception.UnauthorizedException;
 import com.project.ems.common.exception.UserNotFoundException;
 import com.project.ems.event.repository.EventRepository;
 import com.project.ems.offer.repository.OfferRepository;
+import com.project.ems.participant.repository.ParticipantRepository;
 import com.project.ems.payment.repository.PaymentRepository;
 import com.project.ems.refund.dto.RefundResponse;
 import com.project.ems.refund.repository.RefundRepository;
@@ -60,6 +63,7 @@ public class BookingService {
     private final PaymentRepository paymentRepository;
     private final OfferRepository offerRepository;
     private final RefundRepository refundRepository;
+    private final ParticipantRepository participantRepository;
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
@@ -74,7 +78,8 @@ public class BookingService {
                           UserRepository userRepository,
                           PaymentRepository paymentRepository,
                           OfferRepository offerRepository,
-                          RefundRepository refundRepository) {
+                          RefundRepository refundRepository,
+                          ParticipantRepository participantRepository) {
         this.registrationRepository = registrationRepository;
         this.registrationItemRepository = registrationItemRepository;
         this.eventRepository = eventRepository;
@@ -83,6 +88,7 @@ public class BookingService {
         this.paymentRepository = paymentRepository;
         this.offerRepository = offerRepository;
         this.refundRepository = refundRepository;
+        this.participantRepository = participantRepository;
     }
 
     @Transactional(readOnly = true)
@@ -140,6 +146,15 @@ public class BookingService {
             throw new IllegalStateException("Event is not available for booking");
         }
 
+        if (registrationRepository.existsActiveBookingByUserIdAndEventId(userId, event.getId())) {
+            throw new IllegalStateException("You already have an active booking for this event");
+        }
+
+        int totalQty = request.getItems().stream().mapToInt(BookingItemRequest::getQty).sum();
+        if (totalQty > 10) {
+            throw new IllegalStateException("Cannot book more than 10 tickets in a single order");
+        }
+
         BigDecimal subtotal = BigDecimal.ZERO;
         List<RegistrationItem> itemsToSave = new ArrayList<>();
 
@@ -151,12 +166,26 @@ public class BookingService {
 
         Registration savedRegistration = registrationRepository.save(registration);
 
+        LocalDateTime now = LocalDateTime.now();
+
         for (BookingItemRequest itemReq : request.getItems()) {
             Ticket ticket = ticketRepository.findById(itemReq.getTicketId())
                     .orElseThrow(() -> new TicketNotFoundException(itemReq.getTicketId()));
 
             if (!ticket.getEvent().getId().equals(event.getId())) {
                 throw new TicketNotFoundException(itemReq.getTicketId());
+            }
+
+            if (ticket.getStatus() != Status.ACTIVE) {
+                throw new IllegalStateException("Ticket is not available for sale: " + ticket.getName());
+            }
+
+            if (ticket.getSaleStartTime() != null && now.isBefore(ticket.getSaleStartTime())) {
+                throw new IllegalStateException("Ticket sale has not started yet: " + ticket.getName());
+            }
+
+            if (ticket.getSaleEndTime() != null && now.isAfter(ticket.getSaleEndTime())) {
+                throw new IllegalStateException("Ticket sale has ended: " + ticket.getName());
             }
 
             if (ticket.getAvailableQuantity() < itemReq.getQty()) {
@@ -228,6 +257,13 @@ public class BookingService {
         return toDetailResponse(reg);
     }
 
+    @Transactional(readOnly = true)
+    public BookingDetailResponse getPendingBookingForEvent(Long eventId, Long userId) {
+        return registrationRepository.findPendingBookingByUserIdAndEventId(userId, eventId)
+                .map(this::toDetailResponse)
+                .orElse(null);
+    }
+
     @Transactional
     public BookingDetailResponse cancelBooking(Long bookingId, BookingStatusRequest request, Long userId) {
         Registration reg = registrationRepository.findById(bookingId)
@@ -262,6 +298,14 @@ public class BookingService {
             Ticket ticket = item.getTicket();
             ticket.setAvailableQuantity(ticket.getAvailableQuantity() + item.getQuantity());
             ticketRepository.save(ticket);
+
+            List<Participant> participants = participantRepository.findByRegistrationItemId(item.getId());
+            for (Participant p : participants) {
+                if (p.getStatus() == Participant.ParticipantStatus.ACTIVE) {
+                    p.setStatus(Participant.ParticipantStatus.CANCELLED);
+                    participantRepository.save(p);
+                }
+            }
         }
 
         return toDetailResponse(reg);

@@ -1,6 +1,7 @@
 package com.project.ems.organizer.service;
 
-import java.time.LocalDateTime;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +14,7 @@ import com.project.ems.auth.repository.UserRepository;
 import com.project.ems.common.entity.OrganizerProfile;
 import com.project.ems.common.entity.RoleName;
 import com.project.ems.common.entity.User;
-import com.project.ems.common.exception.OrganizerAlreadyExistsException;
 import com.project.ems.common.exception.OrganizerNotFoundException;
-import com.project.ems.common.exception.UserNotFoundException;
-import com.project.ems.organizer.dto.OrganizerOnboardingRequest;
 import com.project.ems.organizer.dto.OrganizerProfileDTO;
 import com.project.ems.organizer.dto.OrganizerStatusRequest;
 import com.project.ems.organizer.dto.OrganizerUpdateRequest;
@@ -36,52 +34,11 @@ public class OrganizerService {
         this.roleRepository = roleRepository;
     }
 
-    @Transactional
-    public OrganizerProfileDTO onboard(Long userId, OrganizerOnboardingRequest request) {
-
-        if (organizerProfileRepository.findByUserId(userId).isPresent()) {
-            throw new OrganizerAlreadyExistsException("You have already submitted your organizer profile");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        OrganizerProfile profile = new OrganizerProfile();
-        profile.setUser(user);
-        profile.setOrganizationName(request.getOrganizationName().trim());
-
-        if (request.getDescription() != null && !request.getDescription().isBlank()) {
-            profile.setDescription(request.getDescription().trim());
-        }
-
-        if (request.getWebsite() != null && !request.getWebsite().isBlank()) {
-            profile.setWebsite(request.getWebsite().trim());
-        }
-
-        if (request.getInstagram() != null && !request.getInstagram().isBlank()) {
-            profile.setInstagram(request.getInstagram().trim());
-        }
-
-        if (request.getLinkedin() != null && !request.getLinkedin().isBlank()) {
-            profile.setLinkedin(request.getLinkedin().trim());
-        }
-
-        profile.setVerified(false);
-        profile.setCreatedAt(LocalDateTime.now());
-
-        return toDTO(organizerProfileRepository.save(profile));
-    }
-
     @Transactional(readOnly = true)
     public OrganizerProfileDTO getProfileByUserId(Long userId) {
         OrganizerProfile profile = organizerProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new OrganizerNotFoundException("Organizer profile not found"));
         return toDTO(profile);
-    }
-
-    @Transactional(readOnly = true)
-    public OrganizerProfileDTO getMyProfile(Long userId) {
-        return getProfileByUserId(userId);
     }
 
     @Transactional
@@ -114,16 +71,16 @@ public class OrganizerService {
 
     @Transactional(readOnly = true)
     public Page<OrganizerProfileDTO> getAllOrganizers(String status, int page, int size, String sort) {
-    	String[] parts = sort.split(",");
+        String[] parts = sort.split(",");
 
-    	String property = parts[0];
-    	String direction = parts.length > 1 ? parts[1] : "asc";
+        String property = parts[0];
+        String direction = parts.length > 1 ? parts[1] : "asc";
 
-    	Sort.Direction dir = direction.equalsIgnoreCase("desc")
-    	        ? Sort.Direction.DESC
-    	        : Sort.Direction.ASC;
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
-    	Pageable pageable = PageRequest.of(page, size, Sort.by(dir, property));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, property));
 
         if (status != null && status.equalsIgnoreCase("PENDING")) {
             return organizerProfileRepository.findByVerified(false, pageable).map(this::toDTO);
@@ -145,26 +102,23 @@ public class OrganizerService {
                 .orElseThrow(() -> new OrganizerNotFoundException("Organizer profile not found"));
 
         String status = request.getStatus().toUpperCase();
+
         if (status.equals("APPROVED")) {
             profile.setVerified(true);
-            User user = profile.getUser();
-            user.setRole(
-                roleRepository.findByName(RoleName.ORGANIZER)
-                    .orElseThrow(() -> new RuntimeException("Role not found"))
-            );
         } else if (status.equals("REJECTED") || status.equals("SUSPENDED")) {
             profile.setVerified(false);
+        } else {
+            throw new IllegalArgumentException("Invalid status: " + request.getStatus());
         }
 
         return toDTO(organizerProfileRepository.save(profile));
     }
 
     @Transactional
-    public OrganizerProfileDTO updateVerificationStatus(Long profileId, Boolean verified) {
-        OrganizerProfile profile = organizerProfileRepository.findById(profileId)
+    public Map<String, String> getDashboard(Long userId) {
+        organizerProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new OrganizerNotFoundException("Organizer profile not found"));
-        profile.setVerified(verified);
-        return toDTO(organizerProfileRepository.save(profile));
+        return Map.of("message", "Dashboard data for organizer " + userId);
     }
 
     private OrganizerProfileDTO toDTO(OrganizerProfile profile) {

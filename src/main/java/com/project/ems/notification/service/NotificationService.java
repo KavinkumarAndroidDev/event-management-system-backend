@@ -12,15 +12,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.ems.auth.repository.UserRepository;
+import com.project.ems.common.entity.BroadcastLog;
 import com.project.ems.common.entity.Notification;
 import com.project.ems.common.entity.User;
 import com.project.ems.common.exception.EventNotFoundException;
 import com.project.ems.common.exception.UnauthorizedException;
+import com.project.ems.common.exception.UserNotFoundException;
 import com.project.ems.event.repository.EventRepository;
+import com.project.ems.notification.dto.BroadcastLogResponse;
 import com.project.ems.notification.dto.BroadcastRequest;
 import com.project.ems.notification.dto.NotificationReadRequest;
 import com.project.ems.notification.dto.NotificationResponse;
 import com.project.ems.notification.dto.SendAnnouncementRequest;
+import com.project.ems.notification.repository.BroadcastLogRepository;
 import com.project.ems.notification.repository.NotificationRepository;
 
 @Service
@@ -29,13 +33,16 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final BroadcastLogRepository broadcastLogRepository;
 
     public NotificationService(NotificationRepository notificationRepository,
                                UserRepository userRepository,
-                               EventRepository eventRepository) {
+                               EventRepository eventRepository,
+                               BroadcastLogRepository broadcastLogRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.broadcastLogRepository = broadcastLogRepository;
     }
 
     @Transactional(readOnly = true)
@@ -97,7 +104,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void broadcast(BroadcastRequest request) {
+    public void broadcast(BroadcastRequest request, Long adminId) {
         List<User> users;
 
         if (request.getTargetRole() != null && !request.getTargetRole().isBlank()) {
@@ -118,6 +125,24 @@ public class NotificationService {
             n.setCreatedAt(LocalDateTime.now());
             notificationRepository.save(n);
         }
+
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new UserNotFoundException("Admin not found"));
+
+        BroadcastLog log = new BroadcastLog();
+        log.setTitle(request.getTitle());
+        log.setMessage(request.getMessage());
+        log.setTargetRole(request.getTargetRole());
+        log.setRecipientCount(users.size());
+        log.setCreatedAt(LocalDateTime.now());
+        log.setSentBy(admin);
+        broadcastLogRepository.save(log);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BroadcastLogResponse> getBroadcastHistory(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return broadcastLogRepository.findAllByOrderByCreatedAtDesc(pageable).map(this::toLogResponse);
     }
 
     private NotificationResponse toResponse(Notification n) {
@@ -128,6 +153,20 @@ public class NotificationService {
         res.setType(n.getType());
         res.setIsRead(n.getIsRead());
         res.setCreatedAt(n.getCreatedAt());
+        return res;
+    }
+
+    private BroadcastLogResponse toLogResponse(BroadcastLog log) {
+        BroadcastLogResponse res = new BroadcastLogResponse();
+        res.setId(log.getId());
+        res.setTitle(log.getTitle());
+        res.setMessage(log.getMessage());
+        res.setTargetRole(log.getTargetRole());
+        res.setRecipientCount(log.getRecipientCount());
+        res.setCreatedAt(log.getCreatedAt());
+        if (log.getSentBy() != null) {
+            res.setSentByName(log.getSentBy().getFullName());
+        }
         return res;
     }
 }

@@ -10,7 +10,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.project.ems.booking.repository.RegistrationItemRepository;
 import com.project.ems.booking.repository.RegistrationRepository;
+import com.project.ems.common.entity.Registration;
+import com.project.ems.common.entity.RegistrationItem;
+import com.project.ems.common.exception.RegistrationNotFoundException;
+import com.project.ems.participant.dto.ParticipantCreateRequest;
 import com.project.ems.common.entity.Event;
 import com.project.ems.common.entity.Participant;
 import com.project.ems.common.entity.Participant.ParticipantStatus;
@@ -31,15 +41,18 @@ public class ParticipantService {
     private final ParticipantRepository participantRepository;
     private final EventRepository eventRepository;
     private final RegistrationRepository registrationRepository;
+    private final RegistrationItemRepository registrationItemRepository;
     private final RefundRepository refundRepository;
 
     public ParticipantService(ParticipantRepository participantRepository,
                               EventRepository eventRepository,
                               RegistrationRepository registrationRepository,
+                              RegistrationItemRepository registrationItemRepository,
                               RefundRepository refundRepository) {
         this.participantRepository = participantRepository;
         this.eventRepository = eventRepository;
         this.registrationRepository = registrationRepository;
+        this.registrationItemRepository = registrationItemRepository;
         this.refundRepository = refundRepository;
     }
 
@@ -113,7 +126,6 @@ public class ParticipantService {
 
         return toResponse(participantRepository.save(p));
     }
-
     @Transactional
     public ParticipantResponse updateParticipant(Long participantId, ParticipantUpdateRequest request, Long userId) {
         Participant p = participantRepository.findById(participantId)
@@ -138,6 +150,73 @@ public class ParticipantService {
         }
 
         return toResponse(participantRepository.save(p));
+    }
+
+    @Transactional
+    public List<ParticipantResponse> createParticipants(List<ParticipantCreateRequest> requests, Long userId) {
+        List<ParticipantResponse> responses = new ArrayList<>();
+
+        for (ParticipantCreateRequest req : requests) {
+            String email = req.getEmail().trim();
+            String phone = req.getPhone().trim();
+            Long eventId = req.getEventId();
+
+            RegistrationItem item = registrationItemRepository.findById(req.getRegistrationItemId())
+                    .orElseThrow(() -> new RegistrationNotFoundException(req.getRegistrationItemId()));
+
+            Event event = eventRepository.findById(eventId)
+                    .orElseThrow(() -> new EventNotFoundException(eventId));
+
+            if (!item.getRegistration().getUser().getId().equals(userId)) {
+                throw new UnauthorizedException("You can only add participants to your own bookings");
+            }
+
+            if (!item.getRegistration().getEvent().getId().equals(eventId)) {
+                throw new IllegalArgumentException("Registration item does not belong to the specified event");
+            }
+
+            // --- COLLISION CLEANUP LOGIC ---
+            // 1. Check Email Collision
+            participantRepository.findByEventIdAndEmail(eventId, email).ifPresent(p -> {
+                if (p.getRegistrationItem().getRegistration().getStatus() == Registration.RegistrationStatus.CONFIRMED) {
+                    throw new IllegalStateException("Email " + email + " is already registered for this event.");
+                } else {
+                    // It's a non-confirmed booking (PENDING, EXPIRED, etc.), so we clear it to make room.
+                    participantRepository.delete(p);
+                    participantRepository.flush(); // Force delete before the next insert
+                }
+            });
+
+            // 2. Check Phone Collision
+            participantRepository.findByEventIdAndPhone(eventId, phone).ifPresent(p -> {
+                if (p.getRegistrationItem().getRegistration().getStatus() == Registration.RegistrationStatus.CONFIRMED) {
+                    throw new IllegalStateException("Phone " + phone + " is already registered for this event.");
+                } else {
+                    participantRepository.delete(p);
+                    participantRepository.flush();
+                }
+            });
+
+            long existingCount = participantRepository.countByRegistrationItemId(item.getId());
+            if (existingCount >= item.getQuantity()) {
+                throw new IllegalStateException("Maximum participants already added for this registration item: " + item.getTicket().getName());
+            }
+
+            Participant p = new Participant();
+            p.setRegistrationItem(item);
+            p.setEvent(event);
+            p.setName(req.getName().trim());
+            p.setEmail(email);
+            p.setPhone(phone);
+            p.setGender(req.getGender());
+            p.setTicketCode(UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase());
+            p.setStatus(ParticipantStatus.ACTIVE);
+            p.setCreatedAt(LocalDateTime.now());
+
+            responses.add(toResponse(participantRepository.saveAndFlush(p)));
+        }
+
+        return responses;
     }
 
     private void initiateRefundForParticipant(Participant participant) {

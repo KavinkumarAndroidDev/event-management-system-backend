@@ -88,15 +88,26 @@ public class EventService {
     }
 
     @Transactional
-    public EventDetailDTO createEvent(EventCreateRequest request, Long userId) {
-        boolean isVerified = organizerProfileRepository.existsByUserIdAndVerifiedTrue(userId);
+    public EventDetailDTO createEvent(EventCreateRequest request, Long userId, String role) {
+        Long effectiveOrganizerId;
+
+        if ("ADMIN".equals(role)) {
+            if (request.getOrganizerId() == null) {
+                throw new IllegalArgumentException("Admin must specify organizerId when creating an event");
+            }
+            effectiveOrganizerId = request.getOrganizerId();
+        } else {
+            effectiveOrganizerId = userId;
+        }
+
+        boolean isVerified = organizerProfileRepository.existsByUserIdAndVerifiedTrue(effectiveOrganizerId);
 
         if (!isVerified) {
             throw new OrganizerNotVerifiedException("Organizer is not verified");
         }
 
-        User organizer = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User organizer = userRepository.findById(effectiveOrganizerId)
+                .orElseThrow(() -> new UserNotFoundException("Organizer not found"));
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
@@ -110,6 +121,9 @@ public class EventService {
             throw new TicketMismatchException("Ticket quantity mismatch with event capacity");
         }
 
+        User creator = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
         Event event = new Event();
         event.setTitle(request.getTitle());
         event.setDescription(request.getDescription());
@@ -122,7 +136,7 @@ public class EventService {
         event.setCancellationDeadline(request.getCancellationDeadline());
         event.setIsCancellable(request.getCancellationDeadline() != null);
         event.setStatus(Event.EventStatus.DRAFT);
-        event.setCreatedBy(organizer);
+        event.setCreatedBy(creator);
         event.setCreatedAt(LocalDateTime.now());
 
         List<Ticket> tickets = request.getTickets().stream().map(t -> {
@@ -144,11 +158,11 @@ public class EventService {
     }
 
     @Transactional
-    public EventDetailDTO updateEvent(Long id, EventUpdateRequest request, Long userId) {
+    public EventDetailDTO updateEvent(Long id, EventUpdateRequest request, Long userId, String role) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
-        if (!event.getOrganizer().getId().equals(userId)) {
+        if (!"ADMIN".equals(role) && !event.getOrganizer().getId().equals(userId)) {
             throw new UnauthorizedException("You can only edit your own events");
         }
 
@@ -195,11 +209,11 @@ public class EventService {
     }
 
     @Transactional
-    public void deleteEvent(Long id, Long userId) {
+    public void deleteEvent(Long id, Long userId, String role) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
-        if (!event.getOrganizer().getId().equals(userId)) {
+        if (!"ADMIN".equals(role) && !event.getOrganizer().getId().equals(userId)) {
             throw new UnauthorizedException("You can only delete your own events");
         }
 
@@ -238,13 +252,21 @@ public class EventService {
                 event.setApprovedAt(LocalDateTime.now());
                 break;
 
+            case "REJECTED":
+                if (!roleName.equals("ADMIN"))
+                    throw new UnauthorizedException("Only admin can reject events");
+                event.setStatus(Event.EventStatus.REJECTED);
+                break;
+
             case "PUBLISHED":
-                if (!roleName.equals("ORGANIZER") || !event.getOrganizer().getId().equals(userId))
-                    throw new UnauthorizedException("Only organizer can publish events");
-                if (event.getStatus() != Event.EventStatus.APPROVED)
-                    throw new IllegalStateException("Event must be APPROVED before publishing");
-                event.setStatus(Event.EventStatus.PUBLISHED);
-                event.setPublishedAt(LocalDateTime.now());
+                if (roleName.equals("ADMIN") || (roleName.equals("ORGANIZER") && event.getOrganizer().getId().equals(userId))) {
+                    if (event.getStatus() != Event.EventStatus.APPROVED)
+                        throw new IllegalStateException("Event must be APPROVED before publishing");
+                    event.setStatus(Event.EventStatus.PUBLISHED);
+                    event.setPublishedAt(LocalDateTime.now());
+                } else {
+                    throw new UnauthorizedException("Only organizer or admin can publish events");
+                }
                 break;
 
             case "CANCELLED":
@@ -338,14 +360,5 @@ public class EventService {
                 LocalDateTime.now(), normalizedSearch, categoryId, normalizedCity,
                 venueId, dateFilter, minPrice, maxPrice, pageable
         ).map(eventMapper::toListDTO);
-    }
-
-    @Transactional(readOnly = true)
-    public List<EventListDTO> listActiveEvents() {
-        return eventRepository
-                .findByStatusAndStartTimeAfter(Event.EventStatus.PUBLISHED, LocalDateTime.now())
-                .stream()
-                .map(eventMapper::toListDTO)
-                .toList();
     }
 }

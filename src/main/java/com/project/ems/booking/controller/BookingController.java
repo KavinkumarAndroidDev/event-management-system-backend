@@ -66,6 +66,14 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getMyBookings(userId, status, page, size));
     }
 
+    @GetMapping("/event/{eventId}/active")
+    public ResponseEntity<BookingDetailResponse> getActiveBookingForEvent(
+            @PathVariable Long eventId,
+            @AuthenticationPrincipal Long userId
+    ) {
+        return ResponseEntity.ok(bookingService.getPendingBookingForEvent(eventId, userId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BookingDetailResponse> getBooking(
             @PathVariable Long id,

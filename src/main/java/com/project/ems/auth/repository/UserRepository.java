@@ -17,6 +17,8 @@ import com.project.ems.common.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailIgnoreCase(String emailId);
+    
+    Optional<User> findByPhoneIgnoreCase(String phoneNumber);
 
     Optional<User> findByPhone(String phoneNumber);
 

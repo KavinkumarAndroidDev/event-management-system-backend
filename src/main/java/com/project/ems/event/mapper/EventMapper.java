@@ -92,6 +92,7 @@ public class EventMapper {
 
         OrganizerDTO dto = new OrganizerDTO();
         dto.setId(event.getOrganizer().getId());
+        dto.setEmail(event.getOrganizer().getEmail());
         dto.setFullName(event.getOrganizer().getFullName());
         return dto;
     }

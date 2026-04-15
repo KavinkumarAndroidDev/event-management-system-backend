@@ -42,12 +42,12 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     "/auth/register",
+                    "/auth/register/organizer",
                     "/auth/login",
                     "/auth/send-otp",
                     "/auth/verify-otp",
                     "/auth/reset-password",
-                    "/auth/refresh",
-                    "/payments/webhook"
+                    "/auth/refresh"
                 ).permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/categories", "/categories/**").permitAll()

@@ -85,31 +85,34 @@ public class EventController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<EventDetailDTO> createEvent(
             @Valid @RequestBody EventCreateRequest request,
             @AuthenticationPrincipal Long userId
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventService.createEvent(request, userId));
+        String role = resolveRole();
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventService.createEvent(request, userId, role));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<EventDetailDTO> updateEvent(
             @PathVariable Long id,
             @Valid @RequestBody EventUpdateRequest request,
             @AuthenticationPrincipal Long userId
     ) {
-        return ResponseEntity.ok(eventService.updateEvent(id, request, userId));
+        String role = resolveRole();
+        return ResponseEntity.ok(eventService.updateEvent(id, request, userId, role));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<String> deleteEvent(
             @PathVariable Long id,
             @AuthenticationPrincipal Long userId
     ) {
-        eventService.deleteEvent(id, userId);
+        String role = resolveRole();
+        eventService.deleteEvent(id, userId, role);
         return ResponseEntity.ok("Event deleted");
     }
 

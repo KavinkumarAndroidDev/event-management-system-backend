@@ -23,7 +23,6 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // GET /categories — PUBLIC sees ACTIVE only; ADMIN sees all
     @Transactional(readOnly = true)
     public List<Category> listCategories(String role) {
         if ("ADMIN".equals(role)) {
@@ -32,13 +31,6 @@ public class CategoryService {
         return categoryRepository.findByStatus(Status.ACTIVE);
     }
 
-    // GET /categories — PUBLIC (kept for internal use)
-    @Transactional(readOnly = true)
-    public List<Category> listActiveCategories() {
-        return categoryRepository.findByStatus(Status.ACTIVE);
-    }
-
-    // GET /categories/{id} — PUBLIC sees ACTIVE only; ADMIN sees all statuses
     @Transactional(readOnly = true)
     public Category getCategoryById(Long id, String role) {
         Category category = categoryRepository.findById(id)
@@ -49,14 +41,6 @@ public class CategoryService {
         return category;
     }
 
-    // GET /categories/{id} — PUBLIC (kept for internal use)
-    @Transactional(readOnly = true)
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
-    }
-
-    // POST /categories — ADMIN
     @Transactional
     public Category createCategory(CategoryCreateRequest request) {
 
@@ -73,14 +57,12 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    // PUT /categories/{id} — ADMIN
     @Transactional
     public Category updateCategory(Long id, CategoryUpdateRequest request) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
 
-        // check duplicate name (excluding current category)
         categoryRepository.findByNameIgnoreCase(request.getCategoryName().trim())
                 .ifPresent(existing -> {
                     if (!existing.getId().equals(id)) {
@@ -92,7 +74,6 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    // PATCH /categories/{id}/status — ADMIN
     @Transactional
     public Category updateCategoryStatus(Long id, CategoryStatusRequest request) {
 
