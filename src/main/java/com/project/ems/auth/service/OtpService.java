@@ -65,14 +65,14 @@ public class OtpService {
         }
 
         String otp = generateOtp();
-
+        System.out.println("OTP FOR "+identifier +" :" +otp);
         OtpVerification entity = new OtpVerification();
         entity.setIdentifier(normalized);
         entity.setOtpCode(otp);
         entity.setExpiresAt(LocalDateTime.now()
                 .plusMinutes(otpExpiryMinutes)
                 .plusSeconds(otpExpirySeconds));
-
+        
         otpRepository.save(entity);
     }
 

@@ -14,6 +14,16 @@ public class BookingDetailResponse {
 	private LocalDateTime createdAt;
 	private List<BookingItemResponse> items;
 
+	private LocalDateTime eventStartTime;
+
+	public LocalDateTime getEventStartTime() {
+		return eventStartTime;
+	}
+
+	public void setEventStartTime(LocalDateTime eventStartTime) {
+		this.eventStartTime = eventStartTime;
+	}
+
 	public Long getId() {
 		return id;
 	}

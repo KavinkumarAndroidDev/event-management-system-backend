@@ -145,10 +145,10 @@ public class BookingService {
         if (event.getStatus() != Event.EventStatus.PUBLISHED) {
             throw new IllegalStateException("Event is not available for booking");
         }
-
-        if (registrationRepository.existsActiveBookingByUserIdAndEventId(userId, event.getId())) {
-            throw new IllegalStateException("You already have an active booking for this event");
-        }
+//
+//        if (registrationRepository.existsActiveBookingByUserIdAndEventId(userId, event.getId())) {
+//            throw new IllegalStateException("You already have an active booking for this event");
+//        }
 
         int totalQty = request.getItems().stream().mapToInt(BookingItemRequest::getQty).sum();
         if (totalQty > 10) {
@@ -375,7 +375,9 @@ public class BookingService {
         if (reg.getEvent() != null) {
             res.setEventId(reg.getEvent().getId());
             res.setEventTitle(reg.getEvent().getTitle());
+            res.setEventStartTime(reg.getEvent().getStartTime()); 
         }
+
 
         List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
         res.setItems(items.stream().map(item -> {
