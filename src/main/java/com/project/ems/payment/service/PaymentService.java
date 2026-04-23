@@ -82,12 +82,30 @@ public class PaymentService {
         Payment payment = paymentRepository.findByRegistrationId(reg.getId())
                 .orElseThrow(() -> new PaymentNotFoundException("Payment record not found"));
 
+        if (payment.getStatus() == PaymentStatus.SUCCESS) {
+            if (reg.getStatus() != RegistrationStatus.CONFIRMED) {
+                reg.setStatus(RegistrationStatus.CONFIRMED);
+                registrationRepository.save(reg);
+            }
+            createParticipants(reg);
+            return toResponse(payment);
+        }
+
+        if (reg.getStatus() != RegistrationStatus.PENDING || reg.isStockReleased()) {
+            throw new IllegalStateException("This booking is not active. Please retry the payment.");
+        }
+
+        if (!request.getRazorpayOrderId().equals(payment.getRazorpayOrderId())) {
+            throw new PaymentVerificationException("Payment order does not match this booking");
+        }
+
         if (!verifySignature(request.getRazorpayOrderId(), request.getRazorpayPaymentId(), request.getRazorpaySignature())) {
             payment.setStatus(PaymentStatus.FAILED);
             paymentRepository.save(payment);
             reg.setStatus(RegistrationStatus.FAILED);
-            registrationRepository.save(reg);
+            participantRepository.deleteByRegistrationItemRegistrationId(reg.getId());
             restoreTicketQuantities(reg);
+            registrationRepository.save(reg);
             throw new PaymentVerificationException("Payment signature verification failed");
         }
 
@@ -117,13 +135,21 @@ public class PaymentService {
         Payment payment = paymentRepository.findByRegistrationId(reg.getId())
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
 
-        payment.setStatus(PaymentStatus.FAILED);
-        paymentRepository.save(payment);
+        if (payment.getStatus() == PaymentStatus.SUCCESS || reg.getStatus() == RegistrationStatus.CONFIRMED) {
+            return;
+        }
 
-        reg.setStatus(RegistrationStatus.FAILED);
-        registrationRepository.save(reg);
+        if (payment.getStatus() != PaymentStatus.FAILED) {
+            payment.setStatus(PaymentStatus.FAILED);
+            paymentRepository.save(payment);
+        }
 
-        restoreTicketQuantities(reg);
+        if (reg.getStatus() == RegistrationStatus.PENDING) {
+            reg.setStatus(RegistrationStatus.FAILED);
+            participantRepository.deleteByRegistrationItemRegistrationId(reg.getId());
+            restoreTicketQuantities(reg);
+            registrationRepository.save(reg);
+        }
     }
 
     @Transactional
@@ -135,8 +161,8 @@ public class PaymentService {
             throw new UnauthorizedException("This booking does not belong to you");
         }
 
-        if (reg.getStatus() != RegistrationStatus.FAILED) {
-            throw new IllegalStateException("Only FAILED bookings can be retried");
+        if (reg.getStatus() != RegistrationStatus.FAILED && reg.getStatus() != RegistrationStatus.EXPIRED) {
+            throw new IllegalStateException("Only FAILED or EXPIRED bookings can be retried");
         }
 
         List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
@@ -158,8 +184,10 @@ public class PaymentService {
 
             for (RegistrationItem item : items) {
                 Ticket ticket = item.getTicket();
-                ticket.setAvailableQuantity(ticket.getAvailableQuantity() - item.getQuantity());
-                ticketRepository.save(ticket);
+                int reduced = ticketRepository.reduceAvailableQuantity(ticket.getId(), reg.getEvent().getId(), item.getQuantity());
+                if (reduced == 0) {
+                    throw new IllegalStateException("Not enough tickets available to retry: " + ticket.getName());
+                }
             }
 
             Payment payment = paymentRepository.findByRegistrationId(reg.getId())
@@ -176,9 +204,12 @@ public class PaymentService {
             paymentRepository.save(payment);
 
             reg.setStatus(RegistrationStatus.PENDING);
+            reg.setStockReleased(false);
             registrationRepository.save(reg);
 
             return newOrderId;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RazorpayOrderException("Failed to create retry order: " + e.getMessage());
         }
@@ -218,12 +249,14 @@ public class PaymentService {
     }
 
     private void restoreTicketQuantities(Registration reg) {
+        if (reg.isStockReleased()) {
+            return;
+        }
         List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
         for (RegistrationItem item : items) {
-            Ticket ticket = item.getTicket();
-            ticket.setAvailableQuantity(ticket.getAvailableQuantity() + item.getQuantity());
-            ticketRepository.save(ticket);
+            ticketRepository.restoreAvailableQuantity(item.getTicket().getId(), item.getQuantity());
         }
+        reg.setStockReleased(true);
     }
 
     private void createParticipants(Registration reg) {

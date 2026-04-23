@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,6 +29,9 @@ public class Registration {
 
 	@Enumerated(EnumType.STRING)
 	private RegistrationStatus status;
+
+	@Column(name = "stock_released")
+	private Boolean stockReleased = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -75,6 +79,18 @@ public class Registration {
 
 	public void setStatus(RegistrationStatus status) {
 		this.status = status;
+	}
+
+	public Boolean getStockReleased() {
+		return stockReleased;
+	}
+
+	public void setStockReleased(Boolean stockReleased) {
+		this.stockReleased = stockReleased;
+	}
+
+	public boolean isStockReleased() {
+		return Boolean.TRUE.equals(stockReleased);
 	}
 
 	public User getUser() {

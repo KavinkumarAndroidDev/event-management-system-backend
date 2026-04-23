@@ -162,6 +162,7 @@ public class BookingService {
         registration.setUser(user);
         registration.setEvent(event);
         registration.setStatus(RegistrationStatus.PENDING);
+        registration.setStockReleased(false);
         registration.setCreatedAt(LocalDateTime.now());
 
         Registration savedRegistration = registrationRepository.save(registration);
@@ -188,12 +189,18 @@ public class BookingService {
                 throw new IllegalStateException("Ticket sale has ended: " + ticket.getName());
             }
 
+            if (itemReq.getQty() <= 0) {
+                throw new IllegalStateException("Ticket quantity should be greater than zero");
+            }
+
             if (ticket.getAvailableQuantity() < itemReq.getQty()) {
                 throw new IllegalStateException("Not enough tickets available for: " + ticket.getName());
             }
 
-            ticket.setAvailableQuantity(ticket.getAvailableQuantity() - itemReq.getQty());
-            ticketRepository.save(ticket);
+            int reduced = ticketRepository.reduceAvailableQuantity(ticket.getId(), event.getId(), itemReq.getQty());
+            if (reduced == 0) {
+                throw new IllegalStateException("Not enough tickets available for: " + ticket.getName());
+            }
 
             RegistrationItem item = new RegistrationItem();
             item.setRegistration(savedRegistration);
@@ -291,14 +298,17 @@ public class BookingService {
         }
 
         reg.setStatus(RegistrationStatus.CANCELLED);
-        registrationRepository.save(reg);
 
         List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
-        for (RegistrationItem item : items) {
-            Ticket ticket = item.getTicket();
-            ticket.setAvailableQuantity(ticket.getAvailableQuantity() + item.getQuantity());
-            ticketRepository.save(ticket);
+        if (!reg.isStockReleased()) {
+            for (RegistrationItem item : items) {
+                ticketRepository.restoreAvailableQuantity(item.getTicket().getId(), item.getQuantity());
+            }
+            reg.setStockReleased(true);
+        }
+        registrationRepository.save(reg);
 
+        for (RegistrationItem item : items) {
             List<Participant> participants = participantRepository.findByRegistrationItemId(item.getId());
             for (Participant p : participants) {
                 if (p.getStatus() == Participant.ParticipantStatus.ACTIVE) {

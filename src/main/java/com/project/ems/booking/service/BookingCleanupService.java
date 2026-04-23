@@ -63,12 +63,12 @@ public class BookingCleanupService {
     private void expireBooking(Registration reg) {
         logger.info("Expiring booking ID: {} created at: {}", reg.getId(), reg.getCreatedAt());
         
-        // 1. Restore ticket quantities
         List<RegistrationItem> items = registrationItemRepository.findByRegistrationId(reg.getId());
-        for (RegistrationItem item : items) {
-            Ticket ticket = item.getTicket();
-            ticket.setAvailableQuantity(ticket.getAvailableQuantity() + item.getQuantity());
-            ticketRepository.save(ticket);
+        if (!reg.isStockReleased()) {
+            for (RegistrationItem item : items) {
+                ticketRepository.restoreAvailableQuantity(item.getTicket().getId(), item.getQuantity());
+            }
+            reg.setStockReleased(true);
         }
 
         // 2. Delete associated participants (to free up unique constraints)
