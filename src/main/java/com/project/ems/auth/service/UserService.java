@@ -50,6 +50,11 @@ public class UserService {
 
         if (request.getPhone() != null && !request.getPhone().isBlank()) {
             String normalizedPhone = request.getPhone().trim().replaceAll("[^\\d]", "");
+            if (!normalizedPhone.equals(user.getPhone())) {
+                userRepository.findByPhone(normalizedPhone).ifPresent(u -> {
+                    throw new IllegalArgumentException("Phone number is already in use");
+                });
+            }
             user.setPhone(normalizedPhone);
         }
 
