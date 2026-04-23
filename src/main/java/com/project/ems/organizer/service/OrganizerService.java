@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.ems.auth.repository.RoleRepository;
 import com.project.ems.auth.repository.UserRepository;
 import com.project.ems.common.entity.OrganizerProfile;
-import com.project.ems.common.entity.RoleName;
-import com.project.ems.common.entity.User;
 import com.project.ems.common.exception.OrganizerNotFoundException;
 import com.project.ems.organizer.dto.OrganizerProfileDTO;
 import com.project.ems.organizer.dto.OrganizerStatusRequest;
@@ -24,14 +22,9 @@ import com.project.ems.organizer.repository.OrganizerProfileRepository;
 public class OrganizerService {
 
     private final OrganizerProfileRepository organizerProfileRepository;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-
     public OrganizerService(OrganizerProfileRepository organizerProfileRepository,
                             UserRepository userRepository, RoleRepository roleRepository) {
         this.organizerProfileRepository = organizerProfileRepository;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Transactional(readOnly = true)

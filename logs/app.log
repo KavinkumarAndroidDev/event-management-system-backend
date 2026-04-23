@@ -1,22 +1,22 @@
-2026-04-20T09:46:52.996+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 4356 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
-2026-04-20T09:46:53.003+05:30 DEBUG 4356 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
-2026-04-20T09:46:53.004+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
-2026-04-20T09:46:53.064+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-04-20T09:46:53.065+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-04-20T09:46:54.216+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-20T09:46:54.348+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 119 ms. Found 18 JPA repository interfaces.
-2026-04-20T09:46:55.327+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
-2026-04-20T09:46:55.342+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-20T09:46:55.343+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-04-20T09:46:55.402+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2337 ms
-2026-04-20T09:46:55.691+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-04-20T09:46:55.768+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
-2026-04-20T09:46:56.413+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-20T09:46:56.483+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-04-20T09:46:56.941+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@15360dde
-2026-04-20T09:46:56.943+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-04-20T09:46:57.087+05:30  WARN 4356 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-04-20T09:46:57.116+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-04-21T10:23:15.574+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T10:23:15.582+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T10:23:15.583+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T10:23:15.654+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-21T10:23:15.654+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-21T10:23:17.134+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T10:23:17.288+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 137 ms. Found 18 JPA repository interfaces.
+2026-04-21T10:23:18.208+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T10:23:18.229+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T10:23:18.230+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T10:23:18.316+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2661 ms
+2026-04-21T10:23:18.676+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T10:23:18.840+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-21T10:23:19.515+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T10:23:19.569+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-21T10:23:20.151+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@109b99c7
+2026-04-21T10:23:20.155+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-21T10:23:20.246+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T10:23:20.279+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
 	Database driver: MySQL Connector/J
 	Database dialect: MySQLDialect
@@ -28,32 +28,334 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-04-20T09:46:59.340+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-20T09:46:59.655+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-20T09:46:59.846+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-04-20T09:47:00.197+05:30 DEBUG 4356 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
-2026-04-20T09:47:03.259+05:30  WARN 4356 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-20T09:47:03.377+05:30  WARN 4356 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+2026-04-21T10:23:22.475+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T10:23:22.842+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T10:23:22.969+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-21T10:23:23.241+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T10:23:26.565+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T10:23:26.864+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 0c43417c-c94c-4368-b3cb-61a960bd5b80
+Using generated security password: 63b3bfb6-7a09-4d76-9df4-6a26937fe33d
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-04-20T09:47:03.386+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-04-20T09:47:04.633+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
-2026-04-20T09:47:04.661+05:30  INFO 4356 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 12.251 seconds (process running for 13.497)
-2026-04-20T09:47:10.862+05:30  INFO 4356 --- [EventManagementsystem] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-20T09:47:10.862+05:30  INFO 4356 --- [EventManagementsystem] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-04-20T09:47:10.867+05:30  INFO 4356 --- [EventManagementsystem] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
-2026-04-20T09:47:18.444+05:30  WARN 4356 --- [EventManagementsystem] [http-nio-8082-exec-10] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+2026-04-21T10:23:26.902+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T10:23:28.864+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T10:23:28.894+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 14.024 seconds (process running for 15.395)
+2026-04-21T10:23:50.592+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-21T10:23:50.592+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-21T10:23:50.596+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-04-21T10:23:51.025+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
 	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
 	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
 
-2026-04-20T09:48:30.424+05:30  WARN 4356 --- [EventManagementsystem] [http-nio-8082-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.RazorpayOrderException: Failed to create Razorpay order: BAD_REQUEST_ERROR:Order amount less than minimum amount allowed]
-2026-04-20T10:19:29.589+05:30  WARN 4356 --- [EventManagementsystem] [http-nio-8082-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.RazorpayOrderException: Failed to create Razorpay order: BAD_REQUEST_ERROR:Order amount less than minimum amount allowed]
-2026-04-20T10:35:12.238+05:30  INFO 4356 --- [EventManagementsystem] [RMI TCP Connection(59)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
-2026-04-20T10:35:12.247+05:30  INFO 4356 --- [EventManagementsystem] [RMI TCP Connection(59)-127.0.0.1] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-04-20T10:35:12.312+05:30  INFO 4356 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-04-20T10:35:12.332+05:30  INFO 4356 --- [EventManagementsystem] [RMI TCP Connection(59)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-04-20T10:35:12.339+05:30  INFO 4356 --- [EventManagementsystem] [RMI TCP Connection(59)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-04-20T10:35:12.346+05:30  INFO 4356 --- [EventManagementsystem] [RMI TCP Connection(59)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-21T11:04:39.656+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=48s829ms558µs300ns).
+2026-04-21T11:07:35.880+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m56s225ms251µs500ns).
+2026-04-21T11:32:14.455+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=9m38s288ms874µs400ns).
+2026-04-21T11:34:54.013+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m39s557ms499µs700ns).
+2026-04-21T11:40:57.489+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-21T12:18:28.952+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:28.981+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-7] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:28.989+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:29.000+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:29.011+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:29.019+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:29.030+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-10] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:18:29.037+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.UnauthorizedException: Access denied]
+2026-04-21T12:45:22.285+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=56s585ms110µs200ns).
+2026-04-21T13:16:09.675+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m16s138ms152µs800ns).
+2026-04-21T13:57:34.830+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=33m53s985ms658µs200ns).
+2026-04-21T14:57:00.697+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m51s593ms379µs200ns).
+2026-04-21T15:35:34.109+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-21T15:35:44.765+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.project.ems.common.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-21T16:15:05.830+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m50s971ms426µs400ns).
+2026-04-21T16:22:50.091+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m44s259ms571µs200ns).
+2026-04-21T16:25:31.049+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m10s945ms991µs600ns).
+2026-04-21T16:26:51.735+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=50s680ms904µs).
+2026-04-21T17:09:38.972+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-04-21T17:09:39.007+05:30  INFO 11644 --- [EventManagementsystem] [Thread-1] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:09:39.029+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:09:39.047+05:30  INFO 11644 --- [EventManagementsystem] [Thread-1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:09:39.057+05:30  INFO 11644 --- [EventManagementsystem] [Thread-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-21T17:09:39.065+05:30  INFO 11644 --- [EventManagementsystem] [Thread-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-21T17:09:39.273+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:09:39.274+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:09:39.274+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:09:40.029+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:09:40.169+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:09:40.491+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:09:40.494+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:09:40.494+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:09:40.574+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1294 ms
+2026-04-21T17:09:40.735+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:09:40.842+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:09:40.846+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-04-21T17:09:40.869+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3b8c2669
+2026-04-21T17:09:40.870+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-04-21T17:09:40.873+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:09:40.874+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:09:41.469+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:09:41.782+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:09:41.960+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:09:42.900+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:09:43.058+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3cba3a80-8f37-4b17-bfd6-e6608a454c1f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:09:43.059+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T17:09:43.520+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T17:09:43.587+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 4.358 seconds (process running for 24390.087)
+2026-04-21T17:09:43.591+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-21T17:09:45.063+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 0 deletions, 3 modifications)
+2026-04-21T17:09:45.068+05:30  INFO 11644 --- [EventManagementsystem] [Thread-5] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:09:45.094+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:09:45.100+05:30  INFO 11644 --- [EventManagementsystem] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:09:45.102+05:30  INFO 11644 --- [EventManagementsystem] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-04-21T17:09:45.108+05:30  INFO 11644 --- [EventManagementsystem] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-04-21T17:09:45.243+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:09:45.243+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:09:45.244+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:09:45.572+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:09:45.680+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 105 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:09:45.849+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:09:45.850+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:09:45.852+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:09:45.892+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 646 ms
+2026-04-21T17:09:45.999+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:09:46.044+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:09:46.046+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-04-21T17:09:46.102+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2c6e955e
+2026-04-21T17:09:46.103+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-04-21T17:09:46.105+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:09:46.106+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:09:46.551+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:09:46.604+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:09:46.684+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:09:47.569+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:09:47.731+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b432a762-9534-420f-a93e-0bbe0ded046f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:09:47.733+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T17:09:48.207+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T17:09:48.218+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 3.006 seconds (process running for 24394.718)
+2026-04-21T17:09:48.220+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-21T17:10:13.916+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-04-21T17:10:13.918+05:30  INFO 11644 --- [EventManagementsystem] [Thread-9] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:10:13.926+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:10:13.930+05:30  INFO 11644 --- [EventManagementsystem] [Thread-9] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:10:13.930+05:30  INFO 11644 --- [EventManagementsystem] [Thread-9] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-04-21T17:10:13.934+05:30  INFO 11644 --- [EventManagementsystem] [Thread-9] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-04-21T17:10:14.038+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:10:14.039+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:10:14.039+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:10:14.302+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:10:14.441+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 133 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:10:14.637+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:10:14.638+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:10:14.638+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:10:14.671+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 630 ms
+2026-04-21T17:10:14.746+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:10:14.795+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:10:14.796+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-04-21T17:10:14.812+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5757767d
+2026-04-21T17:10:14.812+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-04-21T17:10:14.813+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:10:14.814+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:10:15.189+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:10:15.233+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:10:15.329+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:10:16.069+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:10:16.154+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 85839b11-9f82-49dd-828e-8e42ba73d4db
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:10:16.157+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T17:10:16.530+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T17:10:16.557+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 2.549 seconds (process running for 24423.057)
+2026-04-21T17:10:16.560+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-21T17:11:23.548+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-04-21T17:11:23.550+05:30  INFO 11644 --- [EventManagementsystem] [Thread-13] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:11:23.594+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:11:23.599+05:30  INFO 11644 --- [EventManagementsystem] [Thread-13] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:11:23.600+05:30  INFO 11644 --- [EventManagementsystem] [Thread-13] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-04-21T17:11:23.607+05:30  INFO 11644 --- [EventManagementsystem] [Thread-13] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-04-21T17:11:23.724+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:11:23.724+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:11:23.724+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:11:24.091+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:11:24.315+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 221 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:11:24.471+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:11:24.485+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:11:24.485+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:11:24.521+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 795 ms
+2026-04-21T17:11:24.603+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:11:24.678+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:11:24.680+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-04-21T17:11:24.696+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5bfda739
+2026-04-21T17:11:24.696+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-04-21T17:11:24.698+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:11:24.699+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:11:25.061+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:11:25.102+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:11:25.184+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:11:26.121+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:11:26.208+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: ce0d25e8-20e2-4766-8b82-8a1120ff0aa3
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:11:26.210+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T17:11:26.585+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T17:11:26.602+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 2.904 seconds (process running for 24493.102)
+2026-04-21T17:11:26.607+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-21T17:11:48.362+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-04-21T17:11:48.364+05:30  INFO 11644 --- [EventManagementsystem] [Thread-17] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:11:48.372+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:11:48.377+05:30  INFO 11644 --- [EventManagementsystem] [Thread-17] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:11:48.378+05:30  INFO 11644 --- [EventManagementsystem] [Thread-17] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-04-21T17:11:48.385+05:30  INFO 11644 --- [EventManagementsystem] [Thread-17] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-04-21T17:11:48.497+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:11:48.497+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:11:48.497+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:11:48.798+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:11:48.893+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:11:49.046+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:11:49.047+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:11:49.047+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:11:49.109+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 609 ms
+2026-04-21T17:11:49.194+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:11:49.249+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:11:49.250+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2026-04-21T17:11:49.270+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6e1424f0
+2026-04-21T17:11:49.270+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2026-04-21T17:11:49.272+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:11:49.273+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:11:49.702+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:11:49.744+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:11:49.858+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:11:50.918+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:11:51.072+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 115d2afe-bf34-4956-84fa-66247182f596
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:11:51.075+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-21T17:11:51.394+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8082 (http) with context path '/api'
+2026-04-21T17:11:51.408+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Started EventManagementsystemApplication in 2.934 seconds (process running for 24517.908)
+2026-04-21T17:11:51.411+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-21T17:22:28.506+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-21T17:22:28.506+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-21T17:22:28.506+05:30  INFO 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-04-21T17:22:28.755+05:30  WARN 11644 --- [EventManagementsystem] [http-nio-8082-exec-3] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-21T17:22:38.329+05:30  WARN 11644 --- [EventManagementsystem] [HikariPool-6:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Thread starvation or clock leap detected (housekeeper delta=48s714ms958µs300ns).
+2026-04-21T17:33:52.110+05:30  INFO 11644 --- [EventManagementsystem] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-04-21T17:33:52.111+05:30  INFO 11644 --- [EventManagementsystem] [Thread-21] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-21T17:33:52.120+05:30  INFO 11644 --- [EventManagementsystem] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-21T17:33:52.131+05:30  INFO 11644 --- [EventManagementsystem] [Thread-21] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:33:52.132+05:30  INFO 11644 --- [EventManagementsystem] [Thread-21] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-04-21T17:33:52.139+05:30  INFO 11644 --- [EventManagementsystem] [Thread-21] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2026-04-21T17:33:52.299+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Starting EventManagementsystemApplication using Java 21.0.9 with PID 11644 (C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem\target\classes started by kavin in C:\Users\kavin\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\EventManagementsystem)
+2026-04-21T17:33:52.299+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-21T17:33:52.300+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] c.p.e.EventManagementsystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-21T17:33:53.237+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-21T17:33:53.344+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 106 ms. Found 18 JPA repository interfaces.
+2026-04-21T17:33:53.626+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8082 (http)
+2026-04-21T17:33:53.634+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-21T17:33:53.634+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-21T17:33:53.884+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1581 ms
+2026-04-21T17:33:55.238+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-21T17:33:55.973+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-21T17:33:55.978+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2026-04-21T17:33:56.012+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2db0385e
+2026-04-21T17:33:56.012+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2026-04-21T17:33:56.015+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-21T17:33:56.016+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ems_db]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.44
+	Default catalog/schema: ems_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-21T17:33:57.811+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-21T17:33:57.918+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-21T17:33:58.109+05:30 DEBUG 11644 --- [EventManagementsystem] [restartedMain] c.project.ems.auth.filter.JwtAuthFilter  : Filter 'jwtAuthFilter' configured for use
+2026-04-21T17:34:00.865+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-21T17:34:01.082+05:30  WARN 11644 --- [EventManagementsystem] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d122f9aa-3a5d-4f3d-9f3e-deaa6aa8d736
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-21T17:34:01.086+05:30  INFO 11644 --- [EventManagementsystem] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
