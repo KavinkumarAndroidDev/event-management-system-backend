@@ -6,6 +6,7 @@ public class EventDetailDTO {
 
     private Long id;
     private String title;
+    private String status;
 
     private String description;
     private String fullDescription;
@@ -20,6 +21,10 @@ public class EventDetailDTO {
     private VenueDTO venue;
     private OrganizerDTO organizer;
 
+    // Flattened convenience fields
+    private String categoryName;
+    private String venueName;
+    private String organizerName;
     private Integer capacity;
 
 	public Long getId() {
@@ -117,6 +122,37 @@ public class EventDetailDTO {
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
-    
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getVenueName() {
+		return venueName;
+	}
+
+	public void setVenueName(String venueName) {
+		this.venueName = venueName;
+	}
+
+	public String getOrganizerName() {
+		return organizerName;
+	}
+
+	public void setOrganizerName(String organizerName) {
+		this.organizerName = organizerName;
+	}
     
 }

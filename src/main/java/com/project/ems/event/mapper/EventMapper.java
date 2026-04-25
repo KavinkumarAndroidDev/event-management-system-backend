@@ -23,6 +23,7 @@ public class EventMapper {
 
         dto.setId(event.getId());
         dto.setTitle(event.getTitle());
+        dto.setStatus(event.getStatus() != null ? event.getStatus().name() : null);
         dto.setDescription(event.getDescription());
         dto.setFullDescription(event.getFullDescription());
         dto.setStartTime(event.getStartTime());
@@ -34,8 +35,15 @@ public class EventMapper {
         dto.setVenue(mapVenue(event));
         dto.setOrganizer(mapOrganizer(event));
 
+        if (event.getCategory() != null) {
+            dto.setCategoryName(event.getCategory().getName());
+        }
         if (event.getVenue() != null) {
+            dto.setVenueName(event.getVenue().getName());
             dto.setCapacity(event.getVenue().getCapacity());
+        }
+        if (event.getOrganizer() != null) {
+            dto.setOrganizerName(event.getOrganizer().getFullName());
         }
 
         return dto;
@@ -48,7 +56,9 @@ public class EventMapper {
 
         dto.setId(event.getId());
         dto.setTitle(event.getTitle());
+        dto.setStatus(event.getStatus() != null ? event.getStatus().name() : null);
         dto.setStartTime(event.getStartTime());
+        dto.setEndTime(event.getEndTime());
 
         if (event.getVenue() != null) {
             dto.setVenueName(event.getVenue().getName());

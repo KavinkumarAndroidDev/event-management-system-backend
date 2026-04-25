@@ -6,8 +6,10 @@ public class EventListDTO {
 
     private Long id;
     private String title;
+    private String status;
 
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     private String venueName;
     private String city;
@@ -32,12 +34,28 @@ public class EventListDTO {
 		this.title = title;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
 	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
+	}
+
+	public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getVenueName() {
@@ -70,7 +88,6 @@ public class EventListDTO {
 
 	public void setStartingPrice(Double startingPrice) {
 		this.startingPrice = startingPrice;
-	} 
-    
+	}
     
 }
