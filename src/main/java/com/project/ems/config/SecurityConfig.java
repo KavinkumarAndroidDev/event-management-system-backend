@@ -17,49 +17,40 @@ import com.project.ems.auth.filter.JwtAuthFilter;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
+	private final JwtAuthFilter jwtAuthFilter;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, CorsConfigurationSource corsConfigurationSource) {
-        this.jwtAuthFilter = jwtAuthFilter;
-        this.corsConfigurationSource = corsConfigurationSource;
+	public SecurityConfig(JwtAuthFilter jwtAuthFilter, CorsConfigurationSource corsConfigurationSource) {
+		this.jwtAuthFilter = jwtAuthFilter;
+		this.corsConfigurationSource = corsConfigurationSource;
 
-    }
-    private final CorsConfigurationSource corsConfigurationSource;
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	private final CorsConfigurationSource corsConfigurationSource;
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ← add this
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .headers(headers ->
-                headers.frameOptions(frame -> frame.deny()))
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-            .authorizeHttpRequests(auth -> auth
+		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.headers(headers -> headers.frameOptions(frame -> frame.deny()))
 
-                .requestMatchers(
-                    "/auth/register",
-                    "/auth/register/organizer",
-                    "/auth/login",
-                    "/auth/send-otp",
-                    "/auth/verify-otp",
-                    "/auth/reset-password",
-                    "/auth/refresh"
-                ).permitAll()
+				.authorizeHttpRequests(auth -> auth
 
-                .requestMatchers(HttpMethod.GET, "/categories", "/categories/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/venues", "/venues/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/events", "/events/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/tickets/**").permitAll()
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
 
-                .anyRequest().authenticated()
-            )
+						.requestMatchers("/auth/register", "/auth/register/organizer", "/auth/login", "/auth/send-otp",
+								"/auth/verify-otp", "/auth/reset-password", "/auth/refresh")
+						.permitAll()
 
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+						.requestMatchers(HttpMethod.GET, "/categories", "/categories/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/venues", "/venues/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/events", "/events/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/tickets/**").permitAll()
 
-        return http.build();
-    }
+						.anyRequest().authenticated())
+
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
 }
