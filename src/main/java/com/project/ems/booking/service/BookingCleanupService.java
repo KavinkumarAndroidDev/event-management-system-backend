@@ -13,7 +13,6 @@ import com.project.ems.common.entity.Payment;
 import com.project.ems.common.entity.Registration;
 import com.project.ems.common.entity.Registration.RegistrationStatus;
 import com.project.ems.common.entity.RegistrationItem;
-import com.project.ems.common.entity.Ticket;
 import com.project.ems.participant.repository.ParticipantRepository;
 import com.project.ems.payment.repository.PaymentRepository;
 import com.project.ems.ticket.repository.TicketRepository;

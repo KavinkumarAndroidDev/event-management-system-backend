@@ -41,6 +41,7 @@ public class SecurityConfig {
 						.requestMatchers("/auth/register", "/auth/register/organizer", "/auth/login", "/auth/send-otp",
 								"/auth/verify-otp", "/auth/reset-password", "/auth/refresh")
 						.permitAll()
+						.requestMatchers(HttpMethod.POST, "/contact").permitAll()
 
 						.requestMatchers(HttpMethod.GET, "/categories", "/categories/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/venues", "/venues/**").permitAll()

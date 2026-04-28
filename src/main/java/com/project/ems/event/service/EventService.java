@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.ems.auth.repository.UserRepository;
+import com.project.ems.booking.repository.RegistrationRepository;
 import com.project.ems.category.repository.CategoryRepository;
 import com.project.ems.common.entity.Category;
 import com.project.ems.common.entity.Event;
@@ -44,6 +46,7 @@ public class EventService {
     private final CategoryRepository categoryRepository;
     private final VenueRepository venueRepository;
     private final UserRepository userRepository;
+    private final RegistrationRepository registrationRepository;
     private final OrganizerProfileRepository organizerProfileRepository;
     private final EventMapper eventMapper;
 
@@ -51,12 +54,14 @@ public class EventService {
                         CategoryRepository categoryRepository,
                         VenueRepository venueRepository,
                         UserRepository userRepository,
+                        RegistrationRepository registrationRepository,
                         OrganizerProfileRepository organizerProfileRepository,
                         EventMapper eventMapper) {
         this.eventRepository = eventRepository;
         this.categoryRepository = categoryRepository;
         this.venueRepository = venueRepository;
         this.userRepository = userRepository;
+        this.registrationRepository = registrationRepository;
         this.organizerProfileRepository = organizerProfileRepository;
         this.eventMapper = eventMapper;
     }
@@ -74,6 +79,14 @@ public class EventService {
             if (!event.getOrganizer().getId().equals(userId)) {
                 throw new UnauthorizedException("Access denied");
             }
+            return eventMapper.toDetailDTO(event);
+        }
+
+        boolean attendeeHasConfirmedBooking = "ATTENDEE".equals(role)
+                && userId != null
+                && registrationRepository.existsConfirmedBookingByUserIdAndEventId(userId, id);
+
+        if (attendeeHasConfirmedBooking) {
             return eventMapper.toDetailDTO(event);
         }
 
@@ -115,10 +128,16 @@ public class EventService {
         Venue venue = venueRepository.findById(request.getVenueId())
                 .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
 
+        validateEventTime(request.getStartTime(), request.getEndTime());
+
         int ticketSum = request.getTickets().stream().mapToInt(t -> t.getTotalQuantity()).sum();
 
         if (ticketSum != request.getTotalQuantity()) {
             throw new TicketMismatchException("Ticket quantity mismatch with event capacity");
+        }
+
+        if (venue.getCapacity() != null && request.getTotalQuantity() > venue.getCapacity()) {
+            throw new IllegalArgumentException("Event capacity cannot be greater than venue capacity");
         }
 
         User creator = userRepository.findById(userId)
@@ -192,6 +211,15 @@ public class EventService {
             Venue venue = venueRepository.findById(request.getVenueId())
                     .orElseThrow(() -> new VenueNotFoundException("Venue not found"));
             event.setVenue(venue);
+        }
+
+        LocalDateTime nextStartTime = request.getStartTime() != null ? request.getStartTime() : event.getStartTime();
+        LocalDateTime nextEndTime = request.getEndTime() != null ? request.getEndTime() : event.getEndTime();
+        validateEventTime(nextStartTime, nextEndTime);
+
+        int currentTicketCapacity = event.getTickets() == null ? 0 : event.getTickets().stream().mapToInt(Ticket::getTotalQuantity).sum();
+        if (event.getVenue() != null && event.getVenue().getCapacity() != null && currentTicketCapacity > event.getVenue().getCapacity()) {
+            throw new IllegalArgumentException("Event capacity cannot be greater than venue capacity");
         }
 
         if (request.getStartTime() != null) event.setStartTime(request.getStartTime());
@@ -318,7 +346,8 @@ public class EventService {
                 ? Sort.Direction.DESC
                 : Sort.Direction.ASC;
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, property));
+        boolean priceSort = property.equalsIgnoreCase("price") || property.equalsIgnoreCase("startingPrice");
+        Pageable pageable = priceSort ? Pageable.unpaged() : PageRequest.of(page, size, Sort.by(dir, property));
 
         String normalizedSearch = (search != null && !search.isBlank()) ? search.trim() : null;
         String normalizedCity = (city != null && !city.isBlank()) ? city.trim() : null;
@@ -336,10 +365,11 @@ public class EventService {
                 } catch (IllegalArgumentException ignored) {
                 }
             }
-            return eventRepository.findAdminEvents(
+            Page<Event> result = eventRepository.findAdminEvents(
                     filterStatus, normalizedSearch, categoryId, normalizedCity,
                     venueId, dateFilter, minPrice, maxPrice, pageable
-            ).map(eventMapper::toListDTO);
+            );
+            return priceSort ? sortByStartingPrice(result, page, size, dir) : result.map(eventMapper::toListDTO);
         }
 
         if ("ORGANIZER".equals(role)) {
@@ -350,15 +380,52 @@ public class EventService {
                 } catch (IllegalArgumentException ignored) {
                 }
             }
-            return eventRepository.findOrganizerEvents(
+            Page<Event> result = eventRepository.findOrganizerEvents(
                     userId, filterStatus, normalizedSearch, categoryId, normalizedCity,
                     venueId, dateFilter, minPrice, maxPrice, pageable
-            ).map(eventMapper::toListDTO);
+            );
+            return priceSort ? sortByStartingPrice(result, page, size, dir) : result.map(eventMapper::toListDTO);
         }
 
-        return eventRepository.findPublicEvents(
+        Page<Event> result = eventRepository.findPublicEvents(
                 LocalDateTime.now(), normalizedSearch, categoryId, normalizedCity,
                 venueId, dateFilter, minPrice, maxPrice, pageable
-        ).map(eventMapper::toListDTO);
+        );
+        return priceSort ? sortByStartingPrice(result, page, size, dir) : result.map(eventMapper::toListDTO);
+    }
+
+    private Page<EventListDTO> sortByStartingPrice(Page<Event> events, int page, int size, Sort.Direction direction) {
+        List<EventListDTO> sorted = events.getContent()
+                .stream()
+                .map(eventMapper::toListDTO)
+                .sorted((a, b) -> compareStartingPrice(a, b, direction))
+                .toList();
+
+        int start = Math.min(page * size, sorted.size());
+        int end = Math.min(start + size, sorted.size());
+        return new PageImpl<>(sorted.subList(start, end), PageRequest.of(page, size), sorted.size());
+    }
+
+    private int compareStartingPrice(EventListDTO a, EventListDTO b, Sort.Direction direction) {
+        Double first = a.getStartingPrice();
+        Double second = b.getStartingPrice();
+
+        if (first == null && second == null) return 0;
+        if (first == null) return 1;
+        if (second == null) return -1;
+
+        return direction == Sort.Direction.DESC ? second.compareTo(first) : first.compareTo(second);
+    }
+
+    private void validateEventTime(LocalDateTime startTime, LocalDateTime endTime) {
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException("Start time and end time are required");
+        }
+        if (!startTime.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Start time must be after current time");
+        }
+        if (!endTime.isAfter(startTime)) {
+            throw new IllegalArgumentException("End time must be after start time");
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.project.ems.ticket.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,10 @@ public class TicketService {
             throw new UnauthorizedException("You can only add tickets to your own events");
         }
 
+        validateTicketPrice(request.getPrice());
+        validateSaleWindow(request.getSaleStartTime(), request.getSaleEndTime());
+        validateVenueCapacity(event, request.getTotalQuantity());
+
         Ticket ticket = new Ticket();
         ticket.setName(request.getName());
         ticket.setPrice(request.getPrice());
@@ -86,10 +91,18 @@ public class TicketService {
             throw new IllegalStateException("Cannot update ticket after sale has started");
         }
 
-        if (request.getPrice() != null) ticket.setPrice(request.getPrice());
+        LocalDateTime nextSaleStart = request.getSaleStartTime() != null ? request.getSaleStartTime() : ticket.getSaleStartTime();
+        LocalDateTime nextSaleEnd = request.getSaleEndTime() != null ? request.getSaleEndTime() : ticket.getSaleEndTime();
+        validateSaleWindow(nextSaleStart, nextSaleEnd);
+
+        if (request.getPrice() != null) {
+            validateTicketPrice(request.getPrice());
+            ticket.setPrice(request.getPrice());
+        }
 
         if (request.getTotalQuantity() != null) {
             int diff = request.getTotalQuantity() - ticket.getTotalQuantity();
+            validateVenueCapacity(ticket.getEvent(), diff);
             ticket.setTotalQuantity(request.getTotalQuantity());
             ticket.setAvailableQuantity(ticket.getAvailableQuantity() + diff);
         }
@@ -131,5 +144,33 @@ public class TicketService {
         }
 
         return res;
+    }
+
+    private void validateTicketPrice(BigDecimal price) {
+        if (price == null || price.compareTo(BigDecimal.ONE) < 0) {
+            throw new IllegalArgumentException("Ticket price must be at least 1");
+        }
+    }
+
+    private void validateSaleWindow(LocalDateTime saleStartTime, LocalDateTime saleEndTime) {
+        if (saleStartTime == null || saleEndTime == null) {
+            throw new IllegalArgumentException("Ticket sale start and end time are required");
+        }
+        if (!saleEndTime.isAfter(saleStartTime)) {
+            throw new IllegalArgumentException("Ticket sale end time must be after sale start time");
+        }
+    }
+
+    private void validateVenueCapacity(Event event, int addedQuantity) {
+        if (event.getVenue() == null || event.getVenue().getCapacity() == null) return;
+
+        int currentQuantity = event.getTickets() == null ? 0 : event.getTickets()
+                .stream()
+                .mapToInt(Ticket::getTotalQuantity)
+                .sum();
+
+        if (currentQuantity + addedQuantity > event.getVenue().getCapacity()) {
+            throw new IllegalArgumentException("Total ticket quantity cannot be greater than venue capacity");
+        }
     }
 }

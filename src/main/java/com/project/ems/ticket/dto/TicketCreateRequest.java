@@ -15,7 +15,7 @@ public class TicketCreateRequest {
     private String name;
 
     @NotNull(message = "Price is required")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Price must be >= 0")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Price must be at least 1")
     private BigDecimal price;
 
     @NotNull(message = "Ticket quantity is required")

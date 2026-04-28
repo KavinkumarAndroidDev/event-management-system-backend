@@ -42,8 +42,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
            "AND (:city IS NULL OR LOWER(e.venue.city) = LOWER(:city)) " +
            "AND (:venueId IS NULL OR e.venue.id = :venueId) " +
            "AND (:date IS NULL OR CAST(e.startTime AS date) = CAST(:date AS date)) " +
-           "AND (:minPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price >= :minPrice AND t.status = 'ACTIVE')) " +
-           "AND (:maxPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price <= :maxPrice AND t.status = 'ACTIVE'))")
+           "AND ((:minPrice IS NULL AND :maxPrice IS NULL) OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.status = 'ACTIVE' " +
+           "AND (:minPrice IS NULL OR t.price >= :minPrice) AND (:maxPrice IS NULL OR t.price <= :maxPrice)))")
     Page<Event> findPublicEvents(
             @Param("now") LocalDateTime now,
             @Param("search") String search,
@@ -63,8 +63,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
            "AND (:city IS NULL OR LOWER(e.venue.city) = LOWER(:city)) " +
            "AND (:venueId IS NULL OR e.venue.id = :venueId) " +
            "AND (:date IS NULL OR CAST(e.startTime AS date) = CAST(:date AS date)) " +
-           "AND (:minPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price >= :minPrice AND t.status = 'ACTIVE')) " +
-           "AND (:maxPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price <= :maxPrice AND t.status = 'ACTIVE'))")
+           "AND ((:minPrice IS NULL AND :maxPrice IS NULL) OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.status = 'ACTIVE' " +
+           "AND (:minPrice IS NULL OR t.price >= :minPrice) AND (:maxPrice IS NULL OR t.price <= :maxPrice)))")
     Page<Event> findOrganizerEvents(
             @Param("organizerId") Long organizerId,
             @Param("status") EventStatus status,
@@ -84,8 +84,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
            "AND (:city IS NULL OR LOWER(e.venue.city) = LOWER(:city)) " +
            "AND (:venueId IS NULL OR e.venue.id = :venueId) " +
            "AND (:date IS NULL OR CAST(e.startTime AS date) = CAST(:date AS date)) " +
-           "AND (:minPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price >= :minPrice AND t.status = 'ACTIVE')) " +
-           "AND (:maxPrice IS NULL OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.price <= :maxPrice AND t.status = 'ACTIVE'))")
+           "AND ((:minPrice IS NULL AND :maxPrice IS NULL) OR EXISTS (SELECT t FROM Ticket t WHERE t.event = e AND t.status = 'ACTIVE' " +
+           "AND (:minPrice IS NULL OR t.price >= :minPrice) AND (:maxPrice IS NULL OR t.price <= :maxPrice)))")
     Page<Event> findAdminEvents(
             @Param("status") EventStatus status,
             @Param("search") String search,

@@ -34,6 +34,9 @@ public interface RegistrationRepository extends JpaRepository<Registration, Long
     @Query("SELECT COUNT(r) > 0 FROM Registration r WHERE r.user.id = :userId AND r.event.id = :eventId AND r.status IN ('PENDING', 'CONFIRMED')")
     boolean existsActiveBookingByUserIdAndEventId(@Param("userId") Long userId, @Param("eventId") Long eventId);
 
+    @Query("SELECT COUNT(r) > 0 FROM Registration r WHERE r.user.id = :userId AND r.event.id = :eventId AND r.status = 'CONFIRMED'")
+    boolean existsConfirmedBookingByUserIdAndEventId(@Param("userId") Long userId, @Param("eventId") Long eventId);
+
     @Query("SELECT r FROM Registration r WHERE r.user.id = :userId AND r.event.id = :eventId AND r.status = 'PENDING'")
     Optional<Registration> findPendingBookingByUserIdAndEventId(@Param("userId") Long userId, @Param("eventId") Long eventId);
 
